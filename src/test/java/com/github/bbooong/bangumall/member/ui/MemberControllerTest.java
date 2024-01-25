@@ -5,6 +5,7 @@ import static org.springframework.http.HttpHeaders.LOCATION;
 
 import com.github.bbooong.bangumall.config.AcceptanceTest;
 import io.restassured.RestAssured;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,7 @@ class MemberControllerTest {
     class Describe_CreateMember {
 
         @Nested
-        @DisplayName("아이디, 비밀번호를 알맞게 입력한 경우")
+        @DisplayName("이메일, 비밀번호를 알맞게 입력한 경우")
         class Context_With_ValidRequest {
 
             final String email = "test@email.com";

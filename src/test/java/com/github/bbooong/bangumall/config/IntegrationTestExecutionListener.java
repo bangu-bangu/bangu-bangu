@@ -6,6 +6,7 @@ import io.restassured.RestAssured;
 import io.restassured.config.EncoderConfig;
 import io.restassured.config.LogConfig;
 import io.restassured.http.ContentType;
+import io.restassured.parsing.Parser;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import org.springframework.test.context.TestContext;
