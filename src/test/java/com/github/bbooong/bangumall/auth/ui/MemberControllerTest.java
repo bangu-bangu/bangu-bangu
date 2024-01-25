@@ -1,4 +1,4 @@
-package com.github.bbooong.bangumall.member.ui;
+package com.github.bbooong.bangumall.auth.ui;
 
 import static org.hamcrest.Matchers.matchesRegex;
 import static org.springframework.http.HttpHeaders.LOCATION;

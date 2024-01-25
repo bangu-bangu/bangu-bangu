@@ -1,7 +1,7 @@
 package com.github.bbooong.bangumall.auth.ui;
 
 import com.github.bbooong.bangumall.auth.dto.LoginResponse;
-import com.github.bbooong.bangumall.member.dto.MemberCreateRequest;
+import com.github.bbooong.bangumall.auth.dto.MemberCreateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
