@@ -3,7 +3,6 @@ package com.github.bbooong.bangumall.auth.ui;
 import com.github.bbooong.bangumall.auth.application.AuthService;
 import com.github.bbooong.bangumall.auth.application.dto.LoginRequest;
 import com.github.bbooong.bangumall.auth.application.dto.LoginResponse;
-import com.github.bbooong.bangumall.auth.application.dto.MemberCreateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

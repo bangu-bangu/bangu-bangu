@@ -1,6 +1,6 @@
 package com.github.bbooong.bangumall.auth.ui;
 
-import com.github.bbooong.bangumall.auth.dto.MemberCreateRequest;
+import com.github.bbooong.bangumall.auth.application.dto.MemberCreateRequest;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
