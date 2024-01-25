@@ -9,5 +9,4 @@ public class BanguMallApplication {
     public static void main(String[] args) {
         SpringApplication.run(BanguMallApplication.class, args);
     }
-
 }
