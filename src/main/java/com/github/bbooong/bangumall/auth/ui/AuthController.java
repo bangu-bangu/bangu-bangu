@@ -1,7 +1,9 @@
 package com.github.bbooong.bangumall.auth.ui;
 
-import com.github.bbooong.bangumall.auth.dto.LoginResponse;
-import com.github.bbooong.bangumall.auth.dto.MemberCreateRequest;
+import com.github.bbooong.bangumall.auth.application.AuthService;
+import com.github.bbooong.bangumall.auth.application.dto.LoginRequest;
+import com.github.bbooong.bangumall.auth.application.dto.LoginResponse;
+import com.github.bbooong.bangumall.auth.application.dto.MemberCreateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +13,11 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
 
+    private final AuthService authService;
+
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public LoginResponse login(@RequestBody MemberCreateRequest request) {
+    public LoginResponse login(@RequestBody final LoginRequest request) {
         return new LoginResponse("");
     }
 }
