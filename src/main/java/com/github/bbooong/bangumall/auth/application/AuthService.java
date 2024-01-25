@@ -1,7 +1,7 @@
 package com.github.bbooong.bangumall.auth.application;
 
-import com.github.bbooong.bangumall.auth.application.dto.LoginRequest;
-import com.github.bbooong.bangumall.auth.application.dto.LoginResponse;
+import com.github.bbooong.bangumall.auth.application.dto.AuthLoginRequest;
+import com.github.bbooong.bangumall.auth.application.dto.AuthLoginResponse;
 import com.github.bbooong.bangumall.auth.domain.Member;
 import com.github.bbooong.bangumall.auth.domain.MemberRepository;
 import com.github.bbooong.bangumall.auth.domain.TokenManager;
@@ -15,13 +15,13 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final TokenManager tokenManager;
 
-    public LoginResponse login(final LoginRequest request) {
+    public AuthLoginResponse login(final AuthLoginRequest request) {
         final Member member =
                 memberRepository
                         .findByEmailAndPassword(request.email(), request.password())
                         .orElseThrow();
 
         final String token = tokenManager.generateToken(member.getId());
-        return new LoginResponse(token);
+        return new AuthLoginResponse(token);
     }
 }
