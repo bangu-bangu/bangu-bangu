@@ -1,11 +1,11 @@
 package com.github.bbooong.bangumall.auth.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("단위 테스트: TokenManger")
 class TokenManagerTest {

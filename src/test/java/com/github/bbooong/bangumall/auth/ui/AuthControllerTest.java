@@ -1,5 +1,7 @@
 package com.github.bbooong.bangumall.auth.ui;
 
+import static org.hamcrest.Matchers.*;
+
 import com.github.bbooong.bangumall.config.AcceptanceTest;
 import com.github.bbooong.bangumall.fixture.MemberFixture;
 import io.restassured.RestAssured;
@@ -9,8 +11,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-
-import static org.hamcrest.Matchers.*;
 
 @DisplayName("인수 테스트: 인증")
 @AcceptanceTest
