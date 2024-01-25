@@ -1,11 +1,11 @@
 package com.github.bbooong.bangumall.auth.ui;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.bbooong.bangumall.config.AcceptanceTest;
 import com.github.bbooong.bangumall.fixture.MemberFixture;
 import io.restassured.RestAssured;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -36,25 +36,21 @@ class AuthControllerTest {
             @Test
             @DisplayName("토큰을 반환한다.")
             void it_returns_token() {
-                final String token =
-                        RestAssured.given()
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                                .body(
-                                        """
+                RestAssured.given()
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .body(
+                                """
                             {
                                 "email": "%s",
                                 "password": "%s"
                             }
                             """
-                                                .formatted(email, password))
-                                .when()
-                                .post("/auth/login")
-                                .then()
-                                .statusCode(HttpStatus.OK.value())
-                                .extract()
-                                .as(String.class);
-
-                assertThat(token).isNotNull().isNotEmpty();
+                                        .formatted(email, password))
+                        .when()
+                        .post("/auth/login")
+                        .then()
+                        .statusCode(HttpStatus.OK.value())
+                        .body("token", Matchers.is(""));
             }
         }
     }

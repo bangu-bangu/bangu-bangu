@@ -1,13 +1,10 @@
 package com.github.bbooong.bangumall.auth.ui;
 
+import com.github.bbooong.bangumall.auth.dto.LoginResponse;
 import com.github.bbooong.bangumall.member.dto.MemberCreateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -15,7 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody MemberCreateRequest request) {
-        return ResponseEntity.ok("");
+    @ResponseStatus(HttpStatus.OK)
+    public LoginResponse login(@RequestBody MemberCreateRequest request) {
+        return new LoginResponse("");
     }
 }
