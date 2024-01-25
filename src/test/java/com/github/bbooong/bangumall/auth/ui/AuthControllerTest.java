@@ -1,17 +1,16 @@
 package com.github.bbooong.bangumall.auth.ui;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.github.bbooong.bangumall.config.AcceptanceTest;
 import com.github.bbooong.bangumall.fixture.MemberFixture;
 import io.restassured.RestAssured;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+
+import static org.hamcrest.Matchers.*;
 
 @DisplayName("인수 테스트: 인증")
 @AcceptanceTest
@@ -50,7 +49,7 @@ class AuthControllerTest {
                         .post("/auth/login")
                         .then()
                         .statusCode(HttpStatus.OK.value())
-                        .body("token", Matchers.is(""));
+                        .body("token", is(not(emptyString())));
             }
         }
     }

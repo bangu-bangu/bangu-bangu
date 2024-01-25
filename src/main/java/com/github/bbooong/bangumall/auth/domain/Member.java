@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "members")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -21,4 +22,8 @@ public class Member {
 
     @Column(nullable = false)
     private String password;
+
+    public static Member create(final String email, final String password) {
+        return new Member(null, email, password);
+    }
 }
