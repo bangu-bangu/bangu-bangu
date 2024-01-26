@@ -5,3 +5,5 @@
 ## ✅ 개발 내용
 
 - 변화 내용
+
+closes #issue_number
