@@ -32,6 +32,7 @@ public class StockService {
                 .getId();
     }
 
+    @Transactional(readOnly = true)
     public List<StockInfoResponse> getStocks(final long productId) {
         return stockRepository.findAllByProductId(productId).stream()
                 .map(StockInfoResponse::from)
