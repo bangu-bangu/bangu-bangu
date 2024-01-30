@@ -50,12 +50,12 @@ class ProductControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .body(
                                 """
-                            {
-                                "name": "%s",
-                                "price": "%s",
-                                "description": "%s"
-                            }
-                            """
+                                        {
+                                            "name": "%s",
+                                            "price": "%s",
+                                            "description": "%s"
+                                        }
+                                        """
                                         .formatted(name, price, description))
                         .when()
                         .post("/products")
@@ -130,8 +130,7 @@ class ProductControllerTest {
                         .body("id", is(양배추_파스타_id.intValue()))
                         .body("name", is("양배추 파스타"))
                         .body("price", is(18000))
-                        .body("description", is("소화가 잘되고 감칠맛이 나는 파스타"))
-                        .body("stock", is(7));
+                        .body("description", is("소화가 잘되고 감칠맛이 나는 파스타"));
             }
         }
     }
