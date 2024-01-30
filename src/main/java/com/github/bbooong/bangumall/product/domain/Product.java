@@ -26,10 +26,7 @@ public class Product {
     @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
-    private Integer stock;
-
     public static Product create(final String name, final int price, final String description) {
-        return new Product(null, name, price, description, 0);
+        return new Product(null, name, price, description);
     }
 }
