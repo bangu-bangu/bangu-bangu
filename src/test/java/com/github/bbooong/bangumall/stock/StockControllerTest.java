@@ -1,12 +1,14 @@
 package com.github.bbooong.bangumall.stock;
 
 import static org.hamcrest.Matchers.matchesRegex;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import com.github.bbooong.bangumall.config.AcceptanceTest;
 import com.github.bbooong.bangumall.fixture.AuthFixture;
 import com.github.bbooong.bangumall.fixture.MemberFixture;
 import com.github.bbooong.bangumall.fixture.ProductFixture;
+import com.github.bbooong.bangumall.fixture.StockFixture;
 import io.restassured.RestAssured;
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,11 +53,11 @@ class StockControllerTest {
                         .contentType(APPLICATION_JSON_VALUE)
                         .body(
                                 """
-                                {
-                                    "quantity": %s,
-                                    "expiredDate": "%s"
-                                }
-                                """
+                                        {
+                                            "quantity": %s,
+                                            "expiredDate": "%s"
+                                        }
+                                        """
                                         .formatted(quantity, expiredDate))
                         .when()
                         .post("/products/{productId}/stocks", 양념게장_id)
@@ -64,6 +66,45 @@ class StockControllerTest {
                         .header(
                                 HttpHeaders.LOCATION,
                                 matchesRegex("/products/[0-9]+/stocks/[0-9]+"));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("stock을 수정할 때")
+    class Describe_ModifyStock {
+
+        long 양념게장_100개_id;
+
+        @BeforeEach
+        public void init() {
+            양념게장_100개_id = StockFixture.create(양념게장_id, 100, LocalDate.of(2034, 1, 30));
+        }
+
+        @Nested
+        @DisplayName("stock 정보를 바르게 입력하면")
+        class Context_With_ValidRequest {
+
+            final int quantity = 200;
+            final LocalDate expiredDate = LocalDate.of(2034, 1, 30);
+
+            @Test
+            @DisplayName("stock id를 반환한다.")
+            void it_returns_stockId() {
+                RestAssured.given()
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .body(
+                                """
+                                {
+                                    "quantity": %s,
+                                    "expiredDate": "%s"
+                                }
+                                """
+                                        .formatted(quantity, expiredDate))
+                        .when()
+                        .put("/products/{productId}/stocks/{stockId}", 양념게장_id, 양념게장_100개_id)
+                        .then()
+                        .statusCode(NO_CONTENT.value());
             }
         }
     }
