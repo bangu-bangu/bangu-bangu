@@ -5,6 +5,7 @@ import com.github.bbooong.bangumall.stock.application.dto.StockInfoResponse;
 import com.github.bbooong.bangumall.stock.application.dto.StockUpdateRequest;
 import com.github.bbooong.bangumall.stock.domain.Stock;
 import com.github.bbooong.bangumall.stock.domain.StockRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,5 +30,11 @@ public class StockService {
         return stockRepository
                 .save(Stock.create(productId, request.quantity(), request.expiredDate()))
                 .getId();
+    }
+
+    public List<StockInfoResponse> getStocks(final long productId) {
+        return stockRepository.findAllByProductId(productId).stream()
+                .map(StockInfoResponse::from)
+                .toList();
     }
 }

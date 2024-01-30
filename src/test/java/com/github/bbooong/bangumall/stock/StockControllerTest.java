@@ -72,6 +72,34 @@ class StockControllerTest {
     }
 
     @Nested
+    @DisplayName("특정 상품의 stock을 모두 조회할 때")
+    class Describe_GetStocks {
+
+        long 양념게장_100개_id;
+        long 양념게장_200개_id;
+
+        @BeforeEach
+        public void init() {
+            양념게장_100개_id = StockFixture.create(양념게장_id, 100, LocalDate.of(2034, 1, 30));
+            양념게장_200개_id = StockFixture.create(양념게장_id, 200, LocalDate.of(2034, 2, 12));
+        }
+
+        @Test
+        @DisplayName("stock 목록을 반환한다.")
+        void it_returns_stocks() {
+            RestAssured.given()
+                    .when()
+                    .get("/products/{productId}/stocks", 양념게장_id)
+                    .then()
+                    .statusCode(OK.value())
+                    .body("[0].quantity", is(100))
+                    .body("[0].expiredDate", is("2034-01-30"))
+                    .body("[1].quantity", is(200))
+                    .body("[1].expiredDate", is("2034-02-12"));
+        }
+    }
+
+    @Nested
     @DisplayName("stock을 수정할 때")
     class Describe_ModifyStock {
 
