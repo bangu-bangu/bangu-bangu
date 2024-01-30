@@ -68,9 +68,9 @@ class ProductControllerTest {
     @DisplayName("전체 product를 조회할 때")
     class Describe_GetProducts {
 
-        private long 양배추_파스타_id;
-        private long 파인애플_스무디_id;
-        private long 에이스_씬에스프레소_id;
+        private Long 양배추_파스타_id;
+        private Long 파인애플_스무디_id;
+        private Long 에이스_씬에스프레소_id;
 
         @BeforeEach
         public void init() {
@@ -89,13 +89,13 @@ class ProductControllerTest {
                     .then()
                     .statusCode(HttpStatus.OK.value())
                     .body("size()", is(3))
-                    .body("[0].id", is(양배추_파스타_id))
+                    .body("[0].id", is(양배추_파스타_id.intValue()))
                     .body("[0].name", is("양배추 파스타"))
-                    .body("[0].price", is("18000"))
-                    .body("[1].id", is(파인애플_스무디_id))
+                    .body("[0].price", is(18000))
+                    .body("[1].id", is(파인애플_스무디_id.intValue()))
                     .body("[1].name", is("파인애플 스무디"))
                     .body("[1].price", is(7000))
-                    .body("[2].id", is(에이스_씬에스프레소_id))
+                    .body("[2].id", is(에이스_씬에스프레소_id.intValue()))
                     .body("[2].name", is("에이스 씬에스프레소"))
                     .body("[2].price", is(3000));
         }
