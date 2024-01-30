@@ -2,6 +2,7 @@ package com.github.bbooong.bangumall.product.ui;
 
 import com.github.bbooong.bangumall.product.application.ProductService;
 import com.github.bbooong.bangumall.product.application.dto.ProductCreateRequest;
+import com.github.bbooong.bangumall.product.application.dto.ProductDetailResponse;
 import com.github.bbooong.bangumall.product.application.dto.ProductInfoResponse;
 import java.net.URI;
 import java.util.List;
@@ -27,5 +28,11 @@ public class ProductController {
     @ResponseStatus(HttpStatus.OK)
     public List<ProductInfoResponse> getProducts() {
         return productService.getProducts();
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ProductDetailResponse getProduct(@PathVariable final long id) {
+        return productService.getProduct(id);
     }
 }

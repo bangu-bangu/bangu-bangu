@@ -1,3 +1,3 @@
 package com.github.bbooong.bangumall.product.application.dto;
 
-public record ProductCreateRequest(String name, int price) {}
+public record ProductCreateRequest(String name, int price, String description) {}

@@ -23,7 +23,10 @@ public class Product {
     @Column(nullable = false)
     private Integer price;
 
-    public static Product create(final String name, final int price) {
-        return new Product(null, name, price);
+    @Column(nullable = false)
+    private String description;
+
+    public static Product create(final String name, final int price, final String description) {
+        return new Product(null, name, price, description);
     }
 }
