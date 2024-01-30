@@ -1,7 +1,8 @@
 package com.github.bbooong.bangumall.stock;
 
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.matchesRegex;
-import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import com.github.bbooong.bangumall.config.AcceptanceTest;
@@ -36,7 +37,7 @@ class StockControllerTest {
     }
 
     @Nested
-    @DisplayName("stock를 생성할 때")
+    @DisplayName("stock을 생성할 때")
     class Describe_CreateStock {
 
         @Nested
@@ -89,22 +90,24 @@ class StockControllerTest {
             final LocalDate expiredDate = LocalDate.of(2034, 1, 30);
 
             @Test
-            @DisplayName("stock id를 반환한다.")
-            void it_returns_stockId() {
+            @DisplayName("수정된 stock 정보를 반환한다.")
+            void it_returns_updatedStockInformation() {
                 RestAssured.given()
                         .contentType(APPLICATION_JSON_VALUE)
                         .body(
                                 """
-                                {
-                                    "quantity": %s,
-                                    "expiredDate": "%s"
-                                }
-                                """
+                                        {
+                                            "quantity": %s,
+                                            "expiredDate": "%s"
+                                        }
+                                        """
                                         .formatted(quantity, expiredDate))
                         .when()
-                        .put("/products/{productId}/stocks/{stockId}", 양념게장_id, 양념게장_100개_id)
+                        .put("/stocks/{id}", 양념게장_100개_id)
                         .then()
-                        .statusCode(NO_CONTENT.value());
+                        .statusCode(OK.value())
+                        .body("quantity", is(quantity))
+                        .body("expiredDate", is(expiredDate.toString()));
             }
         }
     }
