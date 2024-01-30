@@ -50,12 +50,12 @@ class ProductControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .body(
                                 """
-                            {
-                                "name": "%s",
-                                "price": "%s",
-                                "description": "%s"
-                            }
-                            """
+                                        {
+                                            "name": "%s",
+                                            "price": "%s",
+                                            "description": "%s"
+                                        }
+                                        """
                                         .formatted(name, price, description))
                         .when()
                         .post("/products")
