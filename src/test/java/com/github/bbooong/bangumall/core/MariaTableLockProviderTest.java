@@ -1,6 +1,7 @@
 package com.github.bbooong.bangumall.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 import com.github.bbooong.bangumall.testcontainers.MariaDbTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,6 +70,30 @@ class MariaTableLockProviderTest {
             @DisplayName("true를 반환한다.")
             void it_returns_true() {
                 assertThat(mariaTableLockProvider.acquireLock("lock:123", 1)).isTrue();
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("Lock을 해제하려고 할 때")
+    class Describe_ReleaseLock {
+
+        @Nested
+        @DisplayName("동일한 이름의 Lock이 존재할 때")
+        class Context_With_ExistLock {
+
+            @BeforeEach
+            void setUp() {
+                mariaTableLockProvider.acquireLock("lock:123", 1000);
+            }
+
+            @Test
+            @DisplayName("Lock을 해제한다.")
+            void it_releases_lock() {
+                mariaTableLockProvider.releaseLock("lock:123");
+
+                assertThatCode(() -> mariaTableLockProvider.acquireLock("lock:123", 1))
+                        .doesNotThrowAnyException();
             }
         }
     }
