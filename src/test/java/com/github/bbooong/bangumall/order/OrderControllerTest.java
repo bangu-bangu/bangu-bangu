@@ -1,7 +1,9 @@
 package com.github.bbooong.bangumall.order;
 
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.matchesRegex;
 import static org.springframework.http.HttpHeaders.LOCATION;
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import com.github.bbooong.bangumall.config.AcceptanceTest;
@@ -45,35 +47,76 @@ class OrderControllerTest {
         @DisplayName("order 정보를 바르게 입력하면")
         class Context_With_ValidRequest {
 
-            int 양념게장_수량 = 20;
-            int 양배추_파스타_수량 = 13;
+            int 양념게장_재고, 양배추_파스타_재고;
+            int 양념게장_주문_수량 = 20;
+            int 양배추_파스타_주문_수량 = 13;
+
+            @BeforeEach
+            void setUp() {
+                양념게장_재고 =
+                        RestAssured.given()
+                                .when()
+                                .get("/products/{productId}/stocks", 양념게장_id)
+                                .then()
+                                .statusCode(OK.value())
+                                .extract()
+                                .body()
+                                .jsonPath()
+                                .getInt("[0].quantity");
+                양배추_파스타_재고 =
+                        RestAssured.given()
+                                .when()
+                                .get("/products/{productId}/stocks", 양배추_파스타_id)
+                                .then()
+                                .statusCode(OK.value())
+                                .extract()
+                                .body()
+                                .jsonPath()
+                                .getInt("[0].quantity");
+            }
 
             @Test
-            @DisplayName("order id를 반환한다.")
-            void it_returns_orderId() {
+            @DisplayName("order id를 반환하고 재고를 차감한다.")
+            void it_returns_orderId_and_consume_stocks() {
                 RestAssured.given()
                         .contentType(APPLICATION_JSON_VALUE)
                         .body(
                                 """
-                                {
-                                    "orderLines": [
                                         {
-                                            "productId": %d,
-                                            "quantity": %d
-                                        },
-                                        {
-                                            "productId": %d,
-                                            "quantity": %d
+                                            "orderLines": [
+                                                {
+                                                    "productId": %d,
+                                                    "quantity": %d
+                                                },
+                                                {
+                                                    "productId": %d,
+                                                    "quantity": %d
+                                                }
+                                            ]
                                         }
-                                    ]
-                                }
-                                """
-                                        .formatted(양념게장_id, 양념게장_수량, 양배추_파스타_id, 양배추_파스타_수량))
+                                        """
+                                        .formatted(양념게장_id, 양념게장_주문_수량, 양배추_파스타_id, 양배추_파스타_주문_수량))
                         .when()
                         .post("/orders")
                         .then()
                         .statusCode(HttpStatus.CREATED.value())
                         .header(LOCATION, matchesRegex("/orders/[0-9]+"));
+
+                RestAssured.given()
+                        .when()
+                        .get("/products/{productId}/stocks", 양념게장_id)
+                        .then()
+                        .statusCode(OK.value())
+                        .body("[0].quantity", is(양념게장_재고 - 양념게장_주문_수량))
+                        .body("[0].expiredDate", is("2034-01-30"));
+
+                RestAssured.given()
+                        .when()
+                        .get("/products/{productId}/stocks", 양배추_파스타_id)
+                        .then()
+                        .statusCode(OK.value())
+                        .body("[0].quantity", is(양배추_파스타_재고 - 양배추_파스타_주문_수량))
+                        .body("[0].expiredDate", is("2034-02-01"));
             }
         }
     }
