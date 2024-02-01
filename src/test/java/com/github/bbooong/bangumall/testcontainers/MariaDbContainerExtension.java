@@ -10,7 +10,7 @@ public class MariaDbContainerExtension implements BeforeAllCallback {
             new MariaDBContainer<>("mariadb:latest").withUrlParam("useAffectedRows", "true");
 
     @Override
-    public void beforeAll(final ExtensionContext context) throws Exception {
+    public void beforeAll(final ExtensionContext context) {
         if (MARIADB_CONTAINER.isRunning()) {
             return;
         }
