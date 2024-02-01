@@ -12,9 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-@DisplayName("단위 테스트: MariaTableLockProvider")
 @MariaDbTest
 @JdbcTest
+@DisplayName("단위 테스트: MariaTableLockProvider")
 class MariaTableLockProviderTest {
 
     @Autowired JdbcTemplate jdbcTemplate;
