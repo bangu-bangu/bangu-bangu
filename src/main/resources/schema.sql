@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS locks
+(
+    name       VARCHAR(255) PRIMARY KEY,
+    expired_at TIMESTAMP NOT NULL
+);
