@@ -172,11 +172,11 @@ class StockControllerTest {
                                 """
                                         [
                                             {
-                                                "stockId": %d,
+                                                "productId": %d,
                                                 "quantity": %d
                                             },
                                             {
-                                                "stockId": %d,
+                                                "productId": %d,
                                                 "quantity": %d
                                             }
                                         ]
@@ -198,7 +198,7 @@ class StockControllerTest {
                         .statusCode(OK.value())
                         .body("[0].quantity", is(0))
                         .body("[0].expiredDate", is("2034-01-30"))
-                        .body("[1].quantity", is(50))
+                        .body("[1].quantity", is(150))
                         .body("[1].expiredDate", is("2035-01-30"));
 
                 RestAssured.given()

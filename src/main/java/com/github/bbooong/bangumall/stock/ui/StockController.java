@@ -2,6 +2,7 @@ package com.github.bbooong.bangumall.stock.ui;
 
 import com.github.bbooong.bangumall.stock.application.StockService;
 import com.github.bbooong.bangumall.stock.application.dto.StockCreateRequest;
+import com.github.bbooong.bangumall.stock.application.dto.StockDecreaseRequest;
 import com.github.bbooong.bangumall.stock.application.dto.StockInfoResponse;
 import com.github.bbooong.bangumall.stock.application.dto.StockUpdateRequest;
 import java.net.URI;
@@ -43,5 +44,11 @@ public class StockController {
     public StockInfoResponse updateStock(
             @PathVariable final long id, @RequestBody final StockUpdateRequest request) {
         return stockService.update(id, request);
+    }
+
+    @PostMapping("/stocks/decrease")
+    @ResponseStatus(HttpStatus.OK)
+    public void decreaseStocks(@RequestBody final List<StockDecreaseRequest> requests) {
+        stockService.decreaseStocks(requests);
     }
 }

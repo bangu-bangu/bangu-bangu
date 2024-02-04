@@ -41,4 +41,8 @@ public class Stock {
         this.quantity = quantity;
         this.expiredDate = expiredDate;
     }
+
+    public void decreaseQuantity(final int quantity) {
+        this.quantity -= quantity;
+    }
 }
