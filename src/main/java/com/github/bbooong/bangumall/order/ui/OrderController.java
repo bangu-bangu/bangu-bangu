@@ -1,4 +1,4 @@
-package com.github.bbooong.bangumall.order;
+package com.github.bbooong.bangumall.order.ui;
 
 import com.github.bbooong.bangumall.order.application.dto.OrderCreateRequest;
 import java.net.URI;
