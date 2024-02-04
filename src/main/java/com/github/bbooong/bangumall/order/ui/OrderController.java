@@ -19,7 +19,8 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<Void> createOrder(@RequestBody final OrderCreateRequest request) {
-        final long orderId = orderService.createOrder(1L, request);
+        final long orderId =
+                orderService.createOrder(1L, request); // TODO: 인증, 인가 구현 후 memberId를 사용하도록 변경
 
         return ResponseEntity.created(URI.create("/orders/" + orderId)).build();
     }
