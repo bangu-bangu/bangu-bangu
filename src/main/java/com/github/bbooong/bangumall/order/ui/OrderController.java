@@ -1,5 +1,6 @@
 package com.github.bbooong.bangumall.order.ui;
 
+import com.github.bbooong.bangumall.order.application.OrderService;
 import com.github.bbooong.bangumall.order.application.dto.OrderCreateRequest;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class OrderController {
 
+    private final OrderService orderService;
+
     @PostMapping
     public ResponseEntity<Void> createOrder(@RequestBody final OrderCreateRequest request) {
-        final long orderId = 777L;
+        final long orderId = orderService.createOrder(1L, request);
 
         return ResponseEntity.created(URI.create("/orders/" + orderId)).build();
     }
