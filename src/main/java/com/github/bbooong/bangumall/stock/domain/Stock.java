@@ -43,6 +43,10 @@ public class Stock {
     }
 
     public void decreaseQuantity(final int quantity) {
+        if (this.quantity < quantity) {
+            throw new IllegalArgumentException("재고가 부족합니다."); // TODO: 도메인 별 예외 처리
+        }
+
         this.quantity -= quantity;
     }
 }
