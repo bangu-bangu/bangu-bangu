@@ -23,8 +23,8 @@ import org.springframework.http.HttpStatus;
 @AcceptanceTest
 class StockControllerTest {
 
-    String sellerToken;
-    long 양념게장_id;
+    String 판매자_token;
+    long 양념게장_id, 양배추_파스타_id;
 
     @BeforeEach
     public void init() {
@@ -32,8 +32,9 @@ class StockControllerTest {
         final String password = "test";
 
         MemberFixture.createMember(email, password);
-        sellerToken = AuthFixture.login(email, password);
+        판매자_token = AuthFixture.login(email, password);
         양념게장_id = ProductFixture.create("양념게장 1kg", 30000, "진짜 맛있음");
+        양배추_파스타_id = ProductFixture.create("양배추 파스타", 18000, "소화가 잘되고 감칠맛이 나는 파스타");
     }
 
     @Nested
@@ -136,6 +137,79 @@ class StockControllerTest {
                         .statusCode(OK.value())
                         .body("quantity", is(quantity))
                         .body("expiredDate", is(expiredDate.toString()));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("특정 상품들의 stock을 차감할 때")
+    class Describe_DecreaseStock {
+
+        long 양념게장_100개_id, 양념게장_200개_id;
+        long 양배추_파스타_50개_id, 양배추_파스타_100개_id;
+
+        @BeforeEach
+        public void init() {
+            양념게장_100개_id = StockFixture.create(양념게장_id, 100, LocalDate.of(2034, 1, 30));
+            양념게장_200개_id = StockFixture.create(양념게장_id, 200, LocalDate.of(2035, 1, 30));
+            양배추_파스타_50개_id = StockFixture.create(양배추_파스타_id, 50, LocalDate.of(2034, 2, 1));
+            양배추_파스타_100개_id = StockFixture.create(양배추_파스타_id, 100, LocalDate.of(2035, 2, 1));
+        }
+
+        @Nested
+        @DisplayName("수량이 모두 유효하면")
+        class Context_validQuantity {
+
+            long 양념게장_재고_차감_수량 = 150;
+            long 양배추_파스타_재고_차감_수량 = 100;
+
+            @Test
+            @DisplayName("stock을 차감한다.")
+            void it_decreases_stock() {
+                RestAssured.given()
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .body(
+                                """
+                                        [
+                                            {
+                                                "stockId": %d,
+                                                "quantity": %d
+                                            },
+                                            {
+                                                "stockId": %d,
+                                                "quantity": %d
+                                            }
+                                        ]
+                                        """
+                                        .formatted(
+                                                양념게장_id,
+                                                양념게장_재고_차감_수량,
+                                                양배추_파스타_id,
+                                                양배추_파스타_재고_차감_수량))
+                        .when()
+                        .post("/stocks/decrease")
+                        .then()
+                        .statusCode(OK.value());
+
+                RestAssured.given()
+                        .when()
+                        .get("/products/{productId}/stocks", 양념게장_id)
+                        .then()
+                        .statusCode(OK.value())
+                        .body("[0].quantity", is(0))
+                        .body("[0].expiredDate", is("2034-01-30"))
+                        .body("[1].quantity", is(50))
+                        .body("[1].expiredDate", is("2035-01-30"));
+
+                RestAssured.given()
+                        .when()
+                        .get("/products/{productId}/stocks", 양배추_파스타_id)
+                        .then()
+                        .statusCode(OK.value())
+                        .body("[0].quantity", is(0))
+                        .body("[0].expiredDate", is("2034-02-01"))
+                        .body("[1].quantity", is(50))
+                        .body("[1].expiredDate", is("2035-02-01"));
             }
         }
     }
