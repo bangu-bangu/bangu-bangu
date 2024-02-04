@@ -1,6 +1,7 @@
 package com.github.bbooong.bangumall.stock.application;
 
 import com.github.bbooong.bangumall.stock.application.dto.StockCreateRequest;
+import com.github.bbooong.bangumall.stock.application.dto.StockDecreaseRequest;
 import com.github.bbooong.bangumall.stock.application.dto.StockInfoResponse;
 import com.github.bbooong.bangumall.stock.application.dto.StockUpdateRequest;
 import com.github.bbooong.bangumall.stock.domain.Stock;
@@ -37,5 +38,29 @@ public class StockService {
         return stockRepository.findAllByProductId(productId).stream()
                 .map(StockInfoResponse::from)
                 .toList();
+    }
+
+    @Transactional
+    public void decreaseStocks(final List<StockDecreaseRequest> requests) {
+        for (final StockDecreaseRequest request : requests) {
+            final List<Stock> stocks =
+                    stockRepository.findAllExclusivelyByProductIdOrderByExpiredDate(
+                            request.productId());
+
+            int totalQuantity = request.quantity();
+            if (request.quantity() > stocks.stream().mapToInt(Stock::getQuantity).sum()) {
+                throw new RuntimeException("asdf");
+            }
+
+            for (final Stock stock : stocks) {
+                if (totalQuantity <= 0) {
+                    break;
+                }
+
+                final int decreaseQuantity = Math.min(stock.getQuantity(), totalQuantity);
+                stock.decreaseQuantity(decreaseQuantity);
+                totalQuantity -= decreaseQuantity;
+            }
+        }
     }
 }
