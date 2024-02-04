@@ -1,4 +1,4 @@
-package com.github.bbooong.bangumall.stock;
+package com.github.bbooong.bangumall.stock.ui;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.matchesRegex;
