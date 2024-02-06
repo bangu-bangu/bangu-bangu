@@ -1,11 +1,7 @@
 package com.github.bbooong.bangumall.stock.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.github.bbooong.bangumall.stock.exception.StockQuantityNotEnoughException;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -44,7 +40,7 @@ public class Stock {
 
     public void decreaseQuantity(final int quantity) {
         if (this.quantity < quantity) {
-            throw new IllegalArgumentException("재고가 부족합니다."); // TODO: 도메인 별 예외 처리
+            throw new StockQuantityNotEnoughException(); // TODO: 도메인 별 예외 처리
         }
 
         this.quantity -= quantity;
