@@ -2,6 +2,7 @@ package com.github.bbooong.bangumall.stock.domain;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 
+import com.github.bbooong.bangumall.stock.exception.StockQuantityNotEnoughException;
 import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -26,7 +27,7 @@ class StockTest {
             @DisplayName("예외가 발생한다.")
             void it_throws_exception() {
                 assertThatCode(() -> notEnoughStock.decreaseQuantity(overQuantity))
-                        .isExactlyInstanceOf(IllegalArgumentException.class)
+                        .isExactlyInstanceOf(StockQuantityNotEnoughException.class)
                         .hasMessage("재고가 부족합니다.");
             }
         }

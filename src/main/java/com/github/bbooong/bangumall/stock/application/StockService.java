@@ -6,6 +6,7 @@ import com.github.bbooong.bangumall.stock.application.dto.StockInfoResponse;
 import com.github.bbooong.bangumall.stock.application.dto.StockUpdateRequest;
 import com.github.bbooong.bangumall.stock.domain.Stock;
 import com.github.bbooong.bangumall.stock.domain.StockRepository;
+import com.github.bbooong.bangumall.stock.exception.StockQuantityNotEnoughException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -48,8 +49,9 @@ public class StockService {
                             request.productId());
 
             int totalQuantity = request.quantity();
+            // TODO: 검증 로직을 담당하는 컴포넌트를 추가해야 합니다.
             if (request.quantity() > stocks.stream().mapToInt(Stock::getQuantity).sum()) {
-                throw new RuntimeException("asdf");
+                throw new StockQuantityNotEnoughException();
             }
 
             for (final Stock stock : stocks) {
