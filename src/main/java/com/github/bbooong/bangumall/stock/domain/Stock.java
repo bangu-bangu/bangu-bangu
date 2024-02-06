@@ -40,7 +40,7 @@ public class Stock {
 
     public void decreaseQuantity(final int quantity) {
         if (this.quantity < quantity) {
-            throw new StockQuantityNotEnoughException(); // TODO: 도메인 별 예외 처리
+            throw new StockQuantityNotEnoughException();
         }
 
         this.quantity -= quantity;
