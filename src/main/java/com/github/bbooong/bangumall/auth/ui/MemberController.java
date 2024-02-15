@@ -2,6 +2,7 @@ package com.github.bbooong.bangumall.auth.ui;
 
 import com.github.bbooong.bangumall.auth.application.MemberService;
 import com.github.bbooong.bangumall.auth.application.dto.MemberCreateRequest;
+import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,8 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping
-    public ResponseEntity<Void> createMember(@RequestBody final MemberCreateRequest request) {
+    public ResponseEntity<Void> createMember(
+            @Valid @RequestBody final MemberCreateRequest request) {
         final Long memberId = memberService.createMember(request);
         return ResponseEntity.created(URI.create("/members/" + memberId)).build();
     }
