@@ -3,6 +3,7 @@ package com.github.bbooong.bangumall.core.exception;
 import com.github.bbooong.bangumall.core.exception.dto.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -15,6 +16,17 @@ public class GlobalExceptionHandler {
         log.warn("{}", e.getClass().getSimpleName(), e);
 
         return ResponseEntity.status(e.getStatus()).body(new ErrorResponse(e.getMessage()));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(
+            final MethodArgumentNotValidException e) {
+        log.warn("{}", e.getClass().getSimpleName(), e);
+
+        final BanguMallFormatException formatException = new BanguMallFormatException();
+
+        return ResponseEntity.status(formatException.getStatus())
+                .body(new ErrorResponse(formatException.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
