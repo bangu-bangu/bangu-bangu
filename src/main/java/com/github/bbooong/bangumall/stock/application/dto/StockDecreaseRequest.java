@@ -1,3 +1,5 @@
 package com.github.bbooong.bangumall.stock.application.dto;
 
-public record StockDecreaseRequest(long productId, int quantity) {}
+import jakarta.validation.constraints.Positive;
+
+public record StockDecreaseRequest(@Positive long productId, @Positive int quantity) {}
