@@ -27,15 +27,41 @@ class GlobalExceptionHandlerTest {
             void it_returns_badRequest() {
                 RestAssured.given()
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .body(
-                                """
-                                        {
-                                            "test": "%s"
-                                        }
-                                        """
-                                        .formatted(""))
+                        .body("{}")
                         .when()
-                        .post("/test/validation")
+                        .post("/test/validation/request-body")
+                        .then()
+                        .statusCode(HttpStatus.BAD_REQUEST.value())
+                        .body("message", is("잘못된 형식의 요청입니다."));
+            }
+        }
+
+        @Nested
+        @DisplayName("path variable의 형식을 잘못 입력한 경우")
+        class Context_With_InvalidPathVariable {
+
+            @Test
+            @DisplayName("BAD_REQUEST를 반환한다.")
+            void it_returns_badRequest() {
+                RestAssured.given()
+                        .when()
+                        .get("/test/validation/path-variable/%s".formatted(-1))
+                        .then()
+                        .statusCode(HttpStatus.BAD_REQUEST.value())
+                        .body("message", is("잘못된 형식의 요청입니다."));
+            }
+        }
+
+        @Nested
+        @DisplayName("request param의 형식을 잘못 입력한 경우")
+        class Context_With_InvalidRequestParam {
+
+            @Test
+            @DisplayName("BAD_REQUEST를 반환한다.")
+            void it_returns_badRequest() {
+                RestAssured.given()
+                        .when()
+                        .get("/test/validation/request-param?id=%s".formatted(-1))
                         .then()
                         .statusCode(HttpStatus.BAD_REQUEST.value())
                         .body("message", is("잘못된 형식의 요청입니다."));

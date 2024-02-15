@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @Slf4j
 @RestControllerAdvice
@@ -18,9 +20,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(e.getStatus()).body(new ErrorResponse(e.getMessage()));
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(
-            final MethodArgumentNotValidException e) {
+    @ExceptionHandler({
+        MethodArgumentNotValidException.class,
+        MethodArgumentTypeMismatchException.class,
+        HandlerMethodValidationException.class
+    })
+    public ResponseEntity<ErrorResponse> handleValidationException(final Exception e) {
         log.warn("{}", e.getClass().getSimpleName(), e);
 
         final BanguMallFormatException formatException = new BanguMallFormatException();
