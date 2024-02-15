@@ -47,19 +47,16 @@ class ProductControllerTest {
             @DisplayName("product id를 반환한다.")
             void it_returns_productId() {
                 RestAssured.given()
-                        .log()
-                        .all()
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .body(
                                 """
-                                        {
-                                            "name": "%s",
-                                            "price": "%s",
-                                            "description": "%s"
-                                        }
-                                        """
-                                        .formatted(
-                                                name, String.valueOf(Long.MAX_VALUE), description))
+                            {
+                                "name": "%s",
+                                "price": "%s",
+                                "description": "%s"
+                            }
+                            """
+                                        .formatted(name, price, description))
                         .when()
                         .post("/products")
                         .then()
