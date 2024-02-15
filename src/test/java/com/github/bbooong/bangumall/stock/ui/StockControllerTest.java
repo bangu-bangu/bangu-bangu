@@ -122,6 +122,8 @@ class StockControllerTest {
             @DisplayName("수정된 stock 정보를 반환한다.")
             void it_returns_updatedStockInformation() {
                 RestAssured.given()
+                        .log()
+                        .all()
                         .contentType(APPLICATION_JSON_VALUE)
                         .body(
                                 """
@@ -132,7 +134,7 @@ class StockControllerTest {
                                         """
                                         .formatted(quantity, expiredDate))
                         .when()
-                        .put("/stocks/{id}", 양념게장_100개_id)
+                        .put("/stocks/{id}", "-1")
                         .then()
                         .statusCode(OK.value())
                         .body("quantity", is(quantity))

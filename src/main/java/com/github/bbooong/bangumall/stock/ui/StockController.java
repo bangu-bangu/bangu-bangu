@@ -5,6 +5,8 @@ import com.github.bbooong.bangumall.stock.application.dto.StockCreateRequest;
 import com.github.bbooong.bangumall.stock.application.dto.StockDecreaseRequest;
 import com.github.bbooong.bangumall.stock.application.dto.StockInfoResponse;
 import com.github.bbooong.bangumall.stock.application.dto.StockUpdateRequest;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -26,13 +28,14 @@ public class StockController {
 
     @GetMapping("/products/{productId}/stocks")
     @ResponseStatus(HttpStatus.OK)
-    public List<StockInfoResponse> getStock(@PathVariable final long productId) {
+    public List<StockInfoResponse> getStock(@PathVariable @Positive final long productId) {
         return stockService.getStocks(productId);
     }
 
     @PostMapping("/products/{productId}/stocks")
     public ResponseEntity<Void> createStock(
-            @PathVariable final long productId, @RequestBody final StockCreateRequest request) {
+            @PathVariable @Positive final long productId,
+            @Valid @RequestBody final StockCreateRequest request) {
         final long stockId = stockService.create(productId, request);
 
         return ResponseEntity.created(URI.create("/products/" + productId + "/stocks/" + stockId))
@@ -42,13 +45,14 @@ public class StockController {
     @PutMapping("/stocks/{id}")
     @ResponseStatus(HttpStatus.OK)
     public StockInfoResponse updateStock(
-            @PathVariable final long id, @RequestBody final StockUpdateRequest request) {
+            @PathVariable @Positive final long id,
+            @Valid @RequestBody final StockUpdateRequest request) {
         return stockService.update(id, request);
     }
 
     @PostMapping("/stocks/decrease")
     @ResponseStatus(HttpStatus.OK)
-    public void decreaseStocks(@RequestBody final List<StockDecreaseRequest> requests) {
+    public void decreaseStocks(@Valid @RequestBody final List<StockDecreaseRequest> requests) {
         stockService.decreaseStocks(requests);
     }
 }
