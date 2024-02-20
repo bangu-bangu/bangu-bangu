@@ -10,4 +10,6 @@ public class Stocks {
     public Stocks(@NonNull final List<Stock> stocks) {
         this.stocks = stocks;
     }
+
+    public void decreaseQuantity(final int quantity) {}
 }
