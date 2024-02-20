@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.github.bbooong.bangumall.stock.exception.StockDifferentProductException;
 import com.github.bbooong.bangumall.stock.exception.StockQuantityNegativeException;
 import com.github.bbooong.bangumall.stock.exception.StockQuantityNotEnoughException;
 import java.time.LocalDate;
@@ -30,6 +31,22 @@ class StocksTest {
                         .isExactlyInstanceOf(NullPointerException.class);
             }
         }
+
+        @Nested
+        @DisplayName("여러 물품의 재고를 전달하면")
+        class Context_With_StocksWithMultipleProducts {
+
+            final Stock stock1 = Stock.create(1, 10, LocalDate.now().plusDays(1));
+            final Stock stock2 = Stock.create(2, 10, LocalDate.now().plusDays(1));
+
+            @Test
+            @DisplayName("예외를 던진다.")
+            void it_throws_exception() {
+                assertThatCode(() -> new Stocks(List.of(stock1, stock2)))
+                        .isExactlyInstanceOf(StockDifferentProductException.class)
+                        .hasMessage("한 가지 상품의 재고만 불러와야 합니다.");
+            }
+        }
     }
 
     @Nested
@@ -51,7 +68,7 @@ class StocksTest {
         }
 
         @Nested
-        @DisplayName("전체 수량보다 더 많은 값으로 요청하면")
+        @DisplayName("여러 물품의 재고로 구성된 경우")
         class Context_With_QuantityMoreThanTotalQuantity {
 
             @Test
