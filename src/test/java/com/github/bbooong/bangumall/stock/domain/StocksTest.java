@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.github.bbooong.bangumall.core.exception.BanguMallNullPointerException;
 import com.github.bbooong.bangumall.stock.exception.StockDifferentProductException;
 import com.github.bbooong.bangumall.stock.exception.StockQuantityNegativeException;
 import com.github.bbooong.bangumall.stock.exception.StockQuantityNotEnoughException;
@@ -28,7 +29,7 @@ class StocksTest {
             @DisplayName("예외를 던진다.")
             void it_throws_exception() {
                 assertThatCode(() -> new Stocks(null))
-                        .isExactlyInstanceOf(NullPointerException.class);
+                        .isExactlyInstanceOf(BanguMallNullPointerException.class);
             }
         }
 
