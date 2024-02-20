@@ -35,15 +35,15 @@ public class Quantity {
         return values.stream().map(monetary).reduce(Quantity.ZERO, Quantity::add);
     }
 
-    public Quantity subtract(final int value) {
-        if (this.value < value) {
+    public Quantity subtract(final Quantity other) {
+        if (isLessThan(other)) {
             throw new StockQuantityNotEnoughException();
         }
-        return new Quantity(this.value - value);
+        return new Quantity(this.value - other.value);
     }
 
-    public Quantity add(final Quantity quantity) {
-        return new Quantity(this.value + quantity.value);
+    public Quantity add(final Quantity other) {
+        return new Quantity(this.value + other.value);
     }
 
     public boolean isLessThan(final Quantity other) {

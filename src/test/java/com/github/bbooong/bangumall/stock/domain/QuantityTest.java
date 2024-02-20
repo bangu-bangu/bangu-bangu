@@ -40,12 +40,12 @@ class QuantityTest {
         class Context_With_BiggerValue {
 
             final Quantity quantity = Quantity.create(1);
-            final int biggerValue = 2;
+            final Quantity biggerQuantity = Quantity.create(2);
 
             @Test
             @DisplayName("예외를 던진다.")
             void it_throws_exception() {
-                assertThatCode(() -> quantity.subtract(biggerValue))
+                assertThatCode(() -> quantity.subtract(biggerQuantity))
                         .isExactlyInstanceOf(StockQuantityNotEnoughException.class)
                         .hasMessage("수량이 부족합니다.");
             }

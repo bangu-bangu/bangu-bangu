@@ -28,7 +28,7 @@ class StockTest {
             void it_throws_exception() {
                 assertThatCode(() -> notEnoughStock.decreaseQuantity(overQuantity))
                         .isExactlyInstanceOf(StockQuantityNotEnoughException.class)
-                        .hasMessage("재고가 부족합니다.");
+                        .hasMessage("수량이 부족합니다.");
             }
         }
     }

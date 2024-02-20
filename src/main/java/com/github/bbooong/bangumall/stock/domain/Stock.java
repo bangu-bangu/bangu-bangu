@@ -45,6 +45,6 @@ public class Stock {
     }
 
     public void decreaseQuantity(final int quantity) {
-        this.quantity = this.quantity.subtract(quantity);
+        this.quantity = this.quantity.subtract(Quantity.create(quantity));
     }
 }
