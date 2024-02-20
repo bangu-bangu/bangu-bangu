@@ -4,6 +4,7 @@ import com.github.bbooong.bangumall.core.exception.BanguMallNullPointerException
 import com.github.bbooong.bangumall.stock.exception.StockDifferentProductException;
 import com.github.bbooong.bangumall.stock.exception.StockQuantityNegativeException;
 import com.github.bbooong.bangumall.stock.exception.StockQuantityNotEnoughException;
+import java.util.Comparator;
 import java.util.List;
 
 public class Stocks {
@@ -17,7 +18,8 @@ public class Stocks {
         if (stocks.stream().map(Stock::getProductId).distinct().count() > 1) {
             throw new StockDifferentProductException();
         }
-        this.stocks = stocks;
+
+        this.stocks = stocks.stream().sorted(Comparator.comparing(Stock::getExpiredDate)).toList();
     }
 
     public void decreaseQuantity(int quantity) {
