@@ -2,24 +2,23 @@ package com.github.bbooong.bangumall.stock.domain;
 
 import com.github.bbooong.bangumall.core.exception.BanguMallNotAllowedNullException;
 import com.github.bbooong.bangumall.stock.exception.StockDifferentProductException;
-import com.github.bbooong.bangumall.stock.exception.StockQuantityNegativeException;
 import com.github.bbooong.bangumall.stock.exception.StockQuantityNotEnoughException;
 import java.util.Comparator;
 import java.util.List;
 
 public class Stocks {
 
-    private final List<Stock> stocks;
+    private final List<Stock> values;
 
-    private Stocks(final List<Stock> stocks) {
-        if (stocks == null) {
+    private Stocks(final List<Stock> values) {
+        if (values == null) {
             throw new BanguMallNotAllowedNullException();
         }
-        if (stocks.stream().map(Stock::getProductId).distinct().count() > 1) {
+        if (values.stream().map(Stock::getProductId).distinct().count() > 1) {
             throw new StockDifferentProductException();
         }
 
-        this.stocks = stocks.stream().sorted(Comparator.comparing(Stock::getExpiredDate)).toList();
+        this.values = values.stream().sorted(Comparator.comparing(Stock::getExpiredDate)).toList();
     }
 
     public static Stocks create(final List<Stock> stocks) {
@@ -27,21 +26,17 @@ public class Stocks {
     }
 
     public void decreaseQuantity(int quantity) {
-        // TODO: quantity VO 추가
-        if (quantity < 0) {
-            throw new StockQuantityNegativeException();
-        }
-
-        if (quantity > stocks.stream().mapToInt(Stock::getQuantity).sum()) {
+        if (Quantity.sum(values, Stock::getQuantity).isLessThan(quantity)) {
             throw new StockQuantityNotEnoughException();
         }
 
-        for (final Stock stock : stocks) {
+        for (final Stock stock : values) {
             if (quantity <= 0) {
                 break;
             }
 
-            final int decreaseQuantity = Math.min(stock.getQuantity(), quantity);
+            // TODO: 아래 로직 리팩토링
+            final int decreaseQuantity = Math.min(stock.getQuantity().getValue(), quantity);
             stock.decreaseQuantity(decreaseQuantity);
             quantity -= decreaseQuantity;
         }

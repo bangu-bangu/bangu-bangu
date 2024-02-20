@@ -1,6 +1,6 @@
 package com.github.bbooong.bangumall.stock.domain;
 
-import com.github.bbooong.bangumall.stock.exception.StockQuantityNotEnoughException;
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,6 +28,7 @@ public class Stock {
     private Long productId;
 
     @Column(nullable = false)
+    @AttributeOverride(name = "value", column = @Column(name = "quantity"))
     private Quantity quantity;
 
     @Column(nullable = false)
@@ -44,10 +45,6 @@ public class Stock {
     }
 
     public void decreaseQuantity(final int quantity) {
-        if (this.quantity < quantity) {
-            throw new StockQuantityNotEnoughException();
-        }
-
-        this.quantity -= quantity;
+        this.quantity = this.quantity.subtract(quantity);
     }
 }
