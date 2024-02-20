@@ -11,7 +11,7 @@ public class Stocks {
 
     private final List<Stock> stocks;
 
-    public Stocks(final List<Stock> stocks) {
+    private Stocks(final List<Stock> stocks) {
         if (stocks == null) {
             throw new BanguMallNullPointerException();
         }
@@ -20,6 +20,10 @@ public class Stocks {
         }
 
         this.stocks = stocks.stream().sorted(Comparator.comparing(Stock::getExpiredDate)).toList();
+    }
+
+    public static Stocks create(final List<Stock> stocks) {
+        return new Stocks(stocks);
     }
 
     public void decreaseQuantity(int quantity) {

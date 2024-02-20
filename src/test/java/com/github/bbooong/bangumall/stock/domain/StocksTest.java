@@ -28,7 +28,7 @@ class StocksTest {
             @Test
             @DisplayName("예외를 던진다.")
             void it_throws_exception() {
-                assertThatCode(() -> new Stocks(null))
+                assertThatCode(() -> Stocks.create(null))
                         .isExactlyInstanceOf(BanguMallNullPointerException.class);
             }
         }
@@ -43,7 +43,7 @@ class StocksTest {
             @Test
             @DisplayName("예외를 던진다.")
             void it_throws_exception() {
-                assertThatCode(() -> new Stocks(List.of(stock1, stock2)))
+                assertThatCode(() -> Stocks.create(List.of(stock1, stock2)))
                         .isExactlyInstanceOf(StockDifferentProductException.class)
                         .hasMessage("한 가지 상품의 재고만 불러와야 합니다.");
             }
@@ -59,7 +59,7 @@ class StocksTest {
             @Test
             @DisplayName("유통기한이 짧은 순으로 정렬한다.")
             void it_sorts_stocksAscending() {
-                assertThat(new Stocks(List.of(newerStock, olderStock)))
+                assertThat(Stocks.create(List.of(newerStock, olderStock)))
                         .extracting("stocks")
                         .asList()
                         .containsExactly(olderStock, newerStock);
@@ -78,7 +78,7 @@ class StocksTest {
             @Test
             @DisplayName("예외를 던진다.")
             void it_throws_exception() {
-                final Stocks stocks = new Stocks(List.of());
+                final Stocks stocks = Stocks.create(List.of());
 
                 assertThatCode(() -> stocks.decreaseQuantity(-1))
                         .isExactlyInstanceOf(StockQuantityNegativeException.class);
@@ -92,7 +92,7 @@ class StocksTest {
             @Test
             @DisplayName("예외를 던진다.")
             void it_throws_exception() {
-                final Stocks stocks = new Stocks(List.of());
+                final Stocks stocks = Stocks.create(List.of());
 
                 assertThatCode(() -> stocks.decreaseQuantity(1))
                         .isExactlyInstanceOf(StockQuantityNotEnoughException.class);
@@ -108,7 +108,7 @@ class StocksTest {
             void it_decreases_quantity() {
                 final Stock olderStock = Stock.create(1, 10, LocalDate.now().plusDays(1));
                 final Stock newerStock = Stock.create(1, 20, LocalDate.now().plusDays(2));
-                final Stocks stocks = new Stocks(List.of(olderStock, newerStock));
+                final Stocks stocks = Stocks.create(List.of(olderStock, newerStock));
 
                 stocks.decreaseQuantity(15);
                 assertAll(

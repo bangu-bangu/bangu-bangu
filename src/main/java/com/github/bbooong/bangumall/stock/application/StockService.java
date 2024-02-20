@@ -45,7 +45,7 @@ public class StockService {
     public void decreaseStocks(final List<StockDecreaseRequest> requests) {
         for (final StockDecreaseRequest request : requests) {
             final Stocks stocks =
-                    new Stocks(
+                    Stocks.create(
                             stockRepository.findAllExclusivelyByProductIdOrderByExpiredDate(
                                     request.productId()));
             stocks.decreaseQuantity(request.quantity());
