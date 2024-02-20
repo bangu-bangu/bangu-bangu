@@ -6,7 +6,7 @@ import com.github.bbooong.bangumall.stock.application.dto.StockInfoResponse;
 import com.github.bbooong.bangumall.stock.application.dto.StockUpdateRequest;
 import com.github.bbooong.bangumall.stock.domain.Stock;
 import com.github.bbooong.bangumall.stock.domain.StockRepository;
-import com.github.bbooong.bangumall.stock.exception.StockQuantityNotEnoughException;
+import com.github.bbooong.bangumall.stock.domain.Stocks;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -44,25 +44,11 @@ public class StockService {
     @Transactional
     public void decreaseStocks(final List<StockDecreaseRequest> requests) {
         for (final StockDecreaseRequest request : requests) {
-            final List<Stock> stocks =
-                    stockRepository.findAllExclusivelyByProductIdOrderByExpiredDate(
-                            request.productId());
-
-            int totalQuantity = request.quantity();
-            // TODO: 검증 로직을 담당하는 컴포넌트를 추가해야 합니다.
-            if (request.quantity() > stocks.stream().mapToInt(Stock::getQuantity).sum()) {
-                throw new StockQuantityNotEnoughException();
-            }
-
-            for (final Stock stock : stocks) {
-                if (totalQuantity <= 0) {
-                    break;
-                }
-
-                final int decreaseQuantity = Math.min(stock.getQuantity(), totalQuantity);
-                stock.decreaseQuantity(decreaseQuantity);
-                totalQuantity -= decreaseQuantity;
-            }
+            final Stocks stocks =
+                    new Stocks(
+                            stockRepository.findAllExclusivelyByProductIdOrderByExpiredDate(
+                                    request.productId()));
+            stocks.decreaseQuantity(request.quantity());
         }
     }
 }
