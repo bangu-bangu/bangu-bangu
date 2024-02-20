@@ -7,6 +7,6 @@ import com.github.bbooong.bangumall.core.exception.BanguMallException;
 public class StockQuantityNotEnoughException extends BanguMallException {
 
     public StockQuantityNotEnoughException() {
-        super(BAD_REQUEST, "재고가 부족합니다.");
+        super(BAD_REQUEST, "수량이 부족합니다.");
     }
 }
