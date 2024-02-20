@@ -15,5 +15,5 @@ public interface StockRepository extends Repository<Stock, Long> {
     List<Stock> findAllByProductId(long productId);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    List<Stock> findAllExclusivelyByProductIdOrderByExpiredDate(long productId);
+    List<Stock> findAllExclusivelyByProductId(long productId);
 }
