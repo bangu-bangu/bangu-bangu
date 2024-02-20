@@ -47,8 +47,4 @@ public class Stock {
     public void decreaseQuantity(final int quantity) {
         this.quantity = this.quantity.subtract(quantity);
     }
-
-    public int getQuantity() {
-        return quantity.getValue();
-    }
 }
