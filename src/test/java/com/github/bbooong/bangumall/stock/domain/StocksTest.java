@@ -48,6 +48,23 @@ class StocksTest {
                         .hasMessage("한 가지 상품의 재고만 불러와야 합니다.");
             }
         }
+
+        @Nested
+        @DisplayName("유통기한이 서로 다른 재고들을 전달하면")
+        class Context_With_StocksWithDifferentExpiredDate {
+
+            final Stock olderStock = Stock.create(1, 10, LocalDate.now().plusDays(1));
+            final Stock newerStock = Stock.create(1, 10, LocalDate.now().plusDays(2));
+
+            @Test
+            @DisplayName("유통기한이 짧은 순으로 정렬한다.")
+            void it_sorts_stocksAscending() {
+                assertThat(new Stocks(List.of(newerStock, olderStock)))
+                        .extracting("stocks")
+                        .asList()
+                        .containsExactly(olderStock, newerStock);
+            }
+        }
     }
 
     @Nested
