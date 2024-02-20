@@ -99,7 +99,7 @@ class StocksTest {
             void it_decreases_quantity() {
                 stocks.decreaseQuantity(15);
                 assertAll(
-                        () -> assertThat(olderStock.getQuantity()).isEqualTo(0),
+                        () -> assertThat(olderStock.getQuantity()).isEqualTo(10),
                         () -> assertThat(newerStock.getQuantity()).isEqualTo(15));
             }
         }

@@ -42,8 +42,8 @@ public class Quantity {
         return new Quantity(this.value - value);
     }
 
-    public Quantity add(final Quantity quantity) {
-        return new Quantity(this.value + quantity.value);
+    public Quantity add(final int value) {
+        return new Quantity(this.value + value);
     }
 
     public boolean isLessThan(final int value) {
