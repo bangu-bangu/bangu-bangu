@@ -75,12 +75,13 @@ class StocksTest {
         @DisplayName("0보다 작은 값을 전달하면")
         class Context_With_NegativeQuantity {
 
+            final int quantity = -1;
+            final Stocks stocks = Stocks.create(List.of());
+
             @Test
             @DisplayName("예외를 던진다.")
             void it_throws_exception() {
-                final Stocks stocks = Stocks.create(List.of());
-
-                assertThatCode(() -> stocks.decreaseQuantity(-1))
+                assertThatCode(() -> stocks.decreaseQuantity(quantity))
                         .isExactlyInstanceOf(StockQuantityNegativeException.class);
             }
         }
@@ -89,11 +90,11 @@ class StocksTest {
         @DisplayName("여러 물품의 재고로 구성된 경우")
         class Context_With_QuantityMoreThanTotalQuantity {
 
+            final Stocks stocks = Stocks.create(List.of());
+
             @Test
             @DisplayName("예외를 던진다.")
             void it_throws_exception() {
-                final Stocks stocks = Stocks.create(List.of());
-
                 assertThatCode(() -> stocks.decreaseQuantity(1))
                         .isExactlyInstanceOf(StockQuantityNotEnoughException.class);
             }
@@ -103,13 +104,14 @@ class StocksTest {
         @DisplayName("전체 수량보다 같거나 적은 값으로 요청하면")
         class Context_With_QuantityLessThanOrEqualToTotalQuantity {
 
+            final Stock olderStock = Stock.create(1, 10, LocalDate.now().plusDays(1));
+            final Stock newerStock = Stock.create(1, 20, LocalDate.now().plusDays(2));
+
+            final Stocks stocks = Stocks.create(List.of(olderStock, newerStock));
+
             @Test
             @DisplayName("유통기한 순으로 재고를 감소한다.")
             void it_decreases_quantity() {
-                final Stock olderStock = Stock.create(1, 10, LocalDate.now().plusDays(1));
-                final Stock newerStock = Stock.create(1, 20, LocalDate.now().plusDays(2));
-                final Stocks stocks = Stocks.create(List.of(olderStock, newerStock));
-
                 stocks.decreaseQuantity(15);
                 assertAll(
                         () -> assertThat(olderStock.getQuantity()).isEqualTo(0),
