@@ -1,5 +1,6 @@
 package com.github.bbooong.bangumall.stock.domain;
 
+import com.github.bbooong.bangumall.stock.exception.StockQuantityNegativeException;
 import java.util.List;
 import lombok.NonNull;
 
@@ -11,5 +12,10 @@ public class Stocks {
         this.stocks = stocks;
     }
 
-    public void decreaseQuantity(final int quantity) {}
+    public void decreaseQuantity(final int quantity) {
+        // TODO: quantity VO 추가
+        if (quantity < 0) {
+            throw new StockQuantityNegativeException();
+        }
+    }
 }
