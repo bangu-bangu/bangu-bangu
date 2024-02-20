@@ -3,6 +3,7 @@ package com.github.bbooong.bangumall.stock.domain;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 import com.github.bbooong.bangumall.stock.exception.StockQuantityNegativeException;
+import com.github.bbooong.bangumall.stock.exception.StockQuantityNotEnoughException;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -43,6 +44,20 @@ class StocksTest {
 
                 assertThatCode(() -> stocks.decreaseQuantity(-1))
                         .isExactlyInstanceOf(StockQuantityNegativeException.class);
+            }
+        }
+
+        @Nested
+        @DisplayName("전체 수량보다 더 많은 값으로 요청하면")
+        class Context_With_QuantityMoreThanTotalQuantity {
+
+            @Test
+            @DisplayName("예외를 던진다.")
+            void it_throws_exception() {
+                final Stocks stocks = new Stocks(List.of());
+
+                assertThatCode(() -> stocks.decreaseQuantity(1))
+                        .isExactlyInstanceOf(StockQuantityNotEnoughException.class);
             }
         }
     }
