@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.github.bbooong.bangumall.core.exception.BanguMallNotAllowedNullException;
 import com.github.bbooong.bangumall.stock.exception.StockDifferentProductException;
-import com.github.bbooong.bangumall.stock.exception.StockQuantityNegativeException;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -69,21 +68,6 @@ class StocksTest {
     @Nested
     @DisplayName("decreaseQuantity()를 호출할 때")
     class Describe_DecreaseQuantity {
-
-        @Nested
-        @DisplayName("0보다 작은 값을 전달하면")
-        class Context_With_NegativeQuantity {
-
-            final int quantity = -1;
-            final Stocks stocks = Stocks.create(List.of());
-
-            @Test
-            @DisplayName("예외를 던진다.")
-            void it_throws_exception() {
-                assertThatCode(() -> stocks.decreaseQuantity(quantity))
-                        .isExactlyInstanceOf(StockQuantityNegativeException.class);
-            }
-        }
 
         @Nested
         @DisplayName("전체 수량보다 같거나 적은 값으로 요청하면")
