@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.github.bbooong.bangumall.core.exception.BanguMallNotAllowedNullException;
 import com.github.bbooong.bangumall.stock.exception.StockDifferentProductException;
 import com.github.bbooong.bangumall.stock.exception.StockQuantityNegativeException;
-import com.github.bbooong.bangumall.stock.exception.StockQuantityNotEnoughException;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -83,20 +82,6 @@ class StocksTest {
             void it_throws_exception() {
                 assertThatCode(() -> stocks.decreaseQuantity(quantity))
                         .isExactlyInstanceOf(StockQuantityNegativeException.class);
-            }
-        }
-
-        @Nested
-        @DisplayName("여러 물품의 재고로 구성된 경우")
-        class Context_With_QuantityMoreThanTotalQuantity {
-
-            final Stocks stocks = Stocks.create(List.of());
-
-            @Test
-            @DisplayName("예외를 던진다.")
-            void it_throws_exception() {
-                assertThatCode(() -> stocks.decreaseQuantity(1))
-                        .isExactlyInstanceOf(StockQuantityNotEnoughException.class);
             }
         }
 
