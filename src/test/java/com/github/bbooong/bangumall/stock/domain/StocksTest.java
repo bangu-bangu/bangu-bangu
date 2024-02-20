@@ -1,9 +1,12 @@
 package com.github.bbooong.bangumall.stock.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.github.bbooong.bangumall.stock.exception.StockQuantityNegativeException;
 import com.github.bbooong.bangumall.stock.exception.StockQuantityNotEnoughException;
+import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -58,6 +61,24 @@ class StocksTest {
 
                 assertThatCode(() -> stocks.decreaseQuantity(1))
                         .isExactlyInstanceOf(StockQuantityNotEnoughException.class);
+            }
+        }
+
+        @Nested
+        @DisplayName("전체 수량보다 같거나 적은 값으로 요청하면")
+        class Context_With_QuantityLessThanOrEqualToTotalQuantity {
+
+            @Test
+            @DisplayName("예외를 던지지 않는다.")
+            void it_does_not_throw_exception() {
+                final Stock olderStock = Stock.create(1, 10, LocalDate.now().plusDays(1));
+                final Stock newerStock = Stock.create(1, 20, LocalDate.now().plusDays(2));
+                final Stocks stocks = new Stocks(List.of(olderStock, newerStock));
+
+                stocks.decreaseQuantity(15);
+                assertAll(
+                        () -> assertThat(olderStock.getQuantity()).isEqualTo(0),
+                        () -> assertThat(newerStock.getQuantity()).isEqualTo(15));
             }
         }
     }
