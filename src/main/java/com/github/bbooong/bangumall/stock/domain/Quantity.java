@@ -35,6 +35,10 @@ public class Quantity {
         return values.stream().map(monetary).reduce(Quantity.ZERO, Quantity::add);
     }
 
+    public static Quantity min(final Quantity q1, final Quantity q2) {
+        return q1.isLessThan(q2) ? q1 : q2;
+    }
+
     public Quantity subtract(final Quantity other) {
         if (isLessThan(other)) {
             throw new StockQuantityNotEnoughException();

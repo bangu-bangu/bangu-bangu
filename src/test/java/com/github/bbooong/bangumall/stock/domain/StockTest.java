@@ -21,7 +21,7 @@ class StockTest {
         @DisplayName("재고의 수량이 부족하면")
         class Context_With_NotEnoughQuantity {
 
-            final int overQuantity = 20;
+            final Quantity overQuantity = Quantity.create(20);
 
             @Test
             @DisplayName("예외가 발생한다.")

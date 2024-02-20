@@ -26,19 +26,19 @@ public class Stocks {
     }
 
     public void decreaseQuantity(int quantity) {
-        if (Quantity.sum(values, Stock::getQuantity).isLessThan(Quantity.create(quantity))) {
+        Quantity remain = Quantity.create(quantity);
+        if (Quantity.sum(values, Stock::getQuantity).isLessThan(remain)) {
             throw new StockQuantityNotEnoughException();
         }
 
         for (final Stock stock : values) {
-            if (quantity <= 0) {
+            if (remain.equals(Quantity.ZERO)) {
                 break;
             }
 
-            // TODO: 아래 로직 리팩토링
-            final int decreaseQuantity = Math.min(stock.getQuantity().getValue(), quantity);
+            final Quantity decreaseQuantity = Quantity.min(remain, stock.getQuantity());
             stock.decreaseQuantity(decreaseQuantity);
-            quantity -= decreaseQuantity;
+            remain = remain.subtract(decreaseQuantity);
         }
     }
 }

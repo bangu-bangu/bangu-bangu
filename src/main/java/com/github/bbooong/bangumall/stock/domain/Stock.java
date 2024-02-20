@@ -44,7 +44,7 @@ public class Stock {
         this.expiredDate = expiredDate;
     }
 
-    public void decreaseQuantity(final int quantity) {
-        this.quantity = this.quantity.subtract(Quantity.create(quantity));
+    public void decreaseQuantity(final Quantity quantity) {
+        this.quantity = this.quantity.subtract(quantity);
     }
 }
