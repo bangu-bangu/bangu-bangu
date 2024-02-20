@@ -1,5 +1,6 @@
 package com.github.bbooong.bangumall.stock.domain;
 
+import com.github.bbooong.bangumall.stock.exception.StockDifferentProductException;
 import com.github.bbooong.bangumall.stock.exception.StockQuantityNegativeException;
 import com.github.bbooong.bangumall.stock.exception.StockQuantityNotEnoughException;
 import java.util.List;
@@ -10,6 +11,9 @@ public class Stocks {
     private final List<Stock> stocks;
 
     public Stocks(@NonNull final List<Stock> stocks) {
+        if (stocks.stream().map(Stock::getProductId).distinct().count() > 1) {
+            throw new StockDifferentProductException();
+        }
         this.stocks = stocks;
     }
 
