@@ -69,8 +69,8 @@ class StocksTest {
         class Context_With_QuantityLessThanOrEqualToTotalQuantity {
 
             @Test
-            @DisplayName("예외를 던지지 않는다.")
-            void it_does_not_throw_exception() {
+            @DisplayName("유통기한 순으로 재고를 감소한다.")
+            void it_decreases_quantity() {
                 final Stock olderStock = Stock.create(1, 10, LocalDate.now().plusDays(1));
                 final Stock newerStock = Stock.create(1, 20, LocalDate.now().plusDays(2));
                 final Stocks stocks = new Stocks(List.of(olderStock, newerStock));
