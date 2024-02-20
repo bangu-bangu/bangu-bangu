@@ -26,7 +26,7 @@ public class Stocks {
     }
 
     public void decreaseQuantity(int quantity) {
-        if (Quantity.sum(values, Stock::getQuantity).isLessThan(quantity)) {
+        if (Quantity.sum(values, Stock::getQuantity).isLessThan(Quantity.create(quantity))) {
             throw new StockQuantityNotEnoughException();
         }
 

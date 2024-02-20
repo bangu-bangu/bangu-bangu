@@ -59,7 +59,7 @@ class StocksTest {
             @DisplayName("유통기한이 짧은 순으로 정렬한다.")
             void it_sorts_stocksAscending() {
                 assertThat(Stocks.create(List.of(newerStock, olderStock)))
-                        .extracting("stocks")
+                        .extracting("values")
                         .asList()
                         .containsExactly(olderStock, newerStock);
             }
@@ -99,8 +99,8 @@ class StocksTest {
             void it_decreases_quantity() {
                 stocks.decreaseQuantity(15);
                 assertAll(
-                        () -> assertThat(olderStock.getQuantity()).isEqualTo(10),
-                        () -> assertThat(newerStock.getQuantity()).isEqualTo(15));
+                        () -> assertThat(olderStock.getQuantity().getValue()).isEqualTo(0),
+                        () -> assertThat(newerStock.getQuantity().getValue()).isEqualTo(15));
             }
         }
     }
