@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 
-// TODO: JWT exception 분기 상세화 후 추상화
 @RequiredArgsConstructor
 public class TokenParserImpl implements TokenParser {
 
