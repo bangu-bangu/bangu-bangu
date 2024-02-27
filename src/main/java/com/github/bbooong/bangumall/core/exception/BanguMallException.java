@@ -13,4 +13,11 @@ public abstract class BanguMallException extends RuntimeException {
 
         this.status = status;
     }
+
+    protected BanguMallException(
+            final HttpStatus status, final String message, final Throwable cause) {
+        super(message, cause);
+
+        this.status = status;
+    }
 }

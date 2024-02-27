@@ -1,6 +1,8 @@
 package com.github.bbooong.bangumall.auth.ui;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.emptyString;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 import com.github.bbooong.bangumall.config.AcceptanceTest;
 import com.github.bbooong.bangumall.fixture.MemberFixture;
@@ -26,10 +28,11 @@ class AuthControllerTest {
 
             final String email = "test@email.com";
             final String password = "test";
+            final String role = "CUSTOMER";
 
             @BeforeEach
             public void init() {
-                MemberFixture.createMember(email, password);
+                MemberFixture.createMember(email, password, role);
             }
 
             @Test
@@ -39,11 +42,11 @@ class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .body(
                                 """
-                            {
-                                "email": "%s",
-                                "password": "%s"
-                            }
-                            """
+                                        {
+                                            "email": "%s",
+                                            "password": "%s"
+                                        }
+                                        """
                                         .formatted(email, password))
                         .when()
                         .post("/auth/login")

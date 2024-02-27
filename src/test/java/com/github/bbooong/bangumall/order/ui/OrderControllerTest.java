@@ -23,20 +23,20 @@ import org.springframework.http.HttpStatus;
 @AcceptanceTest
 class OrderControllerTest {
 
-    String sellerToken, customerToken;
+    String 판매자_token, 구매자_token;
     long 양념게장_id, 양배추_파스타_id;
 
     @BeforeEach
     public void init() {
-        MemberFixture.createMember("seller@email.com", "seller");
-        sellerToken = AuthFixture.login("seller@email.com", "seller");
-        양념게장_id = ProductFixture.create("양념게장 1kg", 30000, "진짜 맛있음");
-        양배추_파스타_id = ProductFixture.create("양배추 파스타", 18000, "소화가 잘되고 감칠맛이 나는 파스타");
-        StockFixture.create(양념게장_id, 100, LocalDate.of(2034, 1, 30));
-        StockFixture.create(양배추_파스타_id, 50, LocalDate.of(2034, 2, 1));
+        MemberFixture.createMember("vendor@email.com", "vendor", "VENDOR");
+        판매자_token = AuthFixture.login("vendor@email.com", "vendor");
+        양념게장_id = ProductFixture.create(판매자_token, "양념게장 1kg", 30000, "진짜 맛있음");
+        양배추_파스타_id = ProductFixture.create(판매자_token, "양배추 파스타", 18000, "소화가 잘되고 감칠맛이 나는 파스타");
+        StockFixture.create(판매자_token, 양념게장_id, 100, LocalDate.of(2034, 1, 30));
+        StockFixture.create(판매자_token, 양배추_파스타_id, 50, LocalDate.of(2034, 2, 1));
 
-        MemberFixture.createMember("customer@email.com", "customer");
-        customerToken = AuthFixture.login("customer@email.com", "customer");
+        MemberFixture.createMember("customer@email.com", "customer", "CUSTOMER");
+        구매자_token = AuthFixture.login("customer@email.com", "customer");
     }
 
     @Nested
@@ -55,6 +55,9 @@ class OrderControllerTest {
             void setUp() {
                 양념게장_재고 =
                         RestAssured.given()
+                                .contentType(APPLICATION_JSON_VALUE)
+                                .auth()
+                                .oauth2(판매자_token)
                                 .when()
                                 .get("/products/{productId}/stocks", 양념게장_id)
                                 .then()
@@ -65,6 +68,9 @@ class OrderControllerTest {
                                 .getInt("[0].quantity");
                 양배추_파스타_재고 =
                         RestAssured.given()
+                                .contentType(APPLICATION_JSON_VALUE)
+                                .auth()
+                                .oauth2(판매자_token)
                                 .when()
                                 .get("/products/{productId}/stocks", 양배추_파스타_id)
                                 .then()
@@ -80,6 +86,8 @@ class OrderControllerTest {
             void it_returns_orderId_and_consume_stocks() {
                 RestAssured.given()
                         .contentType(APPLICATION_JSON_VALUE)
+                        .auth()
+                        .oauth2(구매자_token)
                         .body(
                                 """
                                         {
@@ -103,6 +111,9 @@ class OrderControllerTest {
                         .header(LOCATION, matchesRegex("/orders/[0-9]+"));
 
                 RestAssured.given()
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .auth()
+                        .oauth2(판매자_token)
                         .when()
                         .get("/products/{productId}/stocks", 양념게장_id)
                         .then()
@@ -111,6 +122,9 @@ class OrderControllerTest {
                         .body("[0].expiredDate", is("2034-01-30"));
 
                 RestAssured.given()
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .auth()
+                        .oauth2(판매자_token)
                         .when()
                         .get("/products/{productId}/stocks", 양배추_파스타_id)
                         .then()

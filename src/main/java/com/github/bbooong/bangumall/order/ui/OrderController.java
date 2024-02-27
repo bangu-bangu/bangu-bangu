@@ -1,5 +1,7 @@
 package com.github.bbooong.bangumall.order.ui;
 
+import com.github.bbooong.bangumall.auth.domain.Authorities;
+import com.github.bbooong.bangumall.auth.domain.MemberRole;
 import com.github.bbooong.bangumall.order.application.OrderService;
 import com.github.bbooong.bangumall.order.application.dto.OrderCreateRequest;
 import jakarta.validation.Valid;
@@ -18,6 +20,7 @@ public class OrderController {
 
     private final OrderService orderService;
 
+    @Authorities(MemberRole.CUSTOMER)
     @PostMapping
     public ResponseEntity<Void> createOrder(@Valid @RequestBody final OrderCreateRequest request) {
         final long orderId =

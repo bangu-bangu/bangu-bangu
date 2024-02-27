@@ -30,11 +30,12 @@ class StockControllerTest {
     public void init() {
         final String email = "test@email.com";
         final String password = "test";
+        final String role = "VENDOR";
 
-        MemberFixture.createMember(email, password);
+        MemberFixture.createMember(email, password, role);
         판매자_token = AuthFixture.login(email, password);
-        양념게장_id = ProductFixture.create("양념게장 1kg", 30000, "진짜 맛있음");
-        양배추_파스타_id = ProductFixture.create("양배추 파스타", 18000, "소화가 잘되고 감칠맛이 나는 파스타");
+        양념게장_id = ProductFixture.create(판매자_token, "양념게장 1kg", 30000, "진짜 맛있음");
+        양배추_파스타_id = ProductFixture.create(판매자_token, "양배추 파스타", 18000, "소화가 잘되고 감칠맛이 나는 파스타");
     }
 
     @Nested
@@ -53,6 +54,8 @@ class StockControllerTest {
             void it_returns_stockId() {
                 RestAssured.given()
                         .contentType(APPLICATION_JSON_VALUE)
+                        .auth()
+                        .oauth2(판매자_token)
                         .body(
                                 """
                                         {
@@ -81,14 +84,17 @@ class StockControllerTest {
 
         @BeforeEach
         public void init() {
-            양념게장_100개_id = StockFixture.create(양념게장_id, 100, LocalDate.of(2034, 1, 30));
-            양념게장_200개_id = StockFixture.create(양념게장_id, 200, LocalDate.of(2034, 2, 12));
+            양념게장_100개_id = StockFixture.create(판매자_token, 양념게장_id, 100, LocalDate.of(2034, 1, 30));
+            양념게장_200개_id = StockFixture.create(판매자_token, 양념게장_id, 200, LocalDate.of(2034, 2, 12));
         }
 
         @Test
         @DisplayName("stock 목록을 반환한다.")
         void it_returns_stocks() {
             RestAssured.given()
+                    .contentType(APPLICATION_JSON_VALUE)
+                    .auth()
+                    .oauth2(판매자_token)
                     .when()
                     .get("/products/{productId}/stocks", 양념게장_id)
                     .then()
@@ -108,7 +114,7 @@ class StockControllerTest {
 
         @BeforeEach
         public void init() {
-            양념게장_100개_id = StockFixture.create(양념게장_id, 100, LocalDate.of(2034, 1, 30));
+            양념게장_100개_id = StockFixture.create(판매자_token, 양념게장_id, 100, LocalDate.of(2034, 1, 30));
         }
 
         @Nested
@@ -123,6 +129,8 @@ class StockControllerTest {
             void it_returns_updatedStockInformation() {
                 RestAssured.given()
                         .contentType(APPLICATION_JSON_VALUE)
+                        .auth()
+                        .oauth2(판매자_token)
                         .body(
                                 """
                                         {
@@ -150,10 +158,12 @@ class StockControllerTest {
 
         @BeforeEach
         public void init() {
-            양념게장_100개_id = StockFixture.create(양념게장_id, 100, LocalDate.of(2034, 1, 30));
-            양념게장_200개_id = StockFixture.create(양념게장_id, 200, LocalDate.of(2035, 1, 30));
-            양배추_파스타_50개_id = StockFixture.create(양배추_파스타_id, 50, LocalDate.of(2034, 2, 1));
-            양배추_파스타_100개_id = StockFixture.create(양배추_파스타_id, 100, LocalDate.of(2035, 2, 1));
+            양념게장_100개_id = StockFixture.create(판매자_token, 양념게장_id, 100, LocalDate.of(2034, 1, 30));
+            양념게장_200개_id = StockFixture.create(판매자_token, 양념게장_id, 200, LocalDate.of(2035, 1, 30));
+            양배추_파스타_50개_id =
+                    StockFixture.create(판매자_token, 양배추_파스타_id, 50, LocalDate.of(2034, 2, 1));
+            양배추_파스타_100개_id =
+                    StockFixture.create(판매자_token, 양배추_파스타_id, 100, LocalDate.of(2035, 2, 1));
         }
 
         @Nested
@@ -168,6 +178,8 @@ class StockControllerTest {
             void it_decreases_stock() {
                 RestAssured.given()
                         .contentType(APPLICATION_JSON_VALUE)
+                        .auth()
+                        .oauth2(판매자_token)
                         .body(
                                 """
                                         [
@@ -192,6 +204,9 @@ class StockControllerTest {
                         .statusCode(OK.value());
 
                 RestAssured.given()
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .auth()
+                        .oauth2(판매자_token)
                         .when()
                         .get("/products/{productId}/stocks", 양념게장_id)
                         .then()
@@ -202,6 +217,9 @@ class StockControllerTest {
                         .body("[1].expiredDate", is("2035-01-30"));
 
                 RestAssured.given()
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .auth()
+                        .oauth2(판매자_token)
                         .when()
                         .get("/products/{productId}/stocks", 양배추_파스타_id)
                         .then()
