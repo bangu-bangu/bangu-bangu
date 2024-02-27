@@ -1,8 +1,8 @@
 package com.github.bbooong.bangumall.auth.domain;
 
 public enum MemberRole {
-    MEMBER,
-    ;
+    VENDOR,
+    CUSTOMER;
 
     public boolean matches(final String role) {
         return name().equals(role);
