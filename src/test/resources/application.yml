@@ -6,3 +6,6 @@ spring:
 logging:
   level:
     org.springframework.jdbc: DEBUG
+
+jwt:
+  secret: 67Cp6rWs66qw67Cp6rWs66qw67Cp6rWs66qw67Cp6rWs66qw67Cp6rWs66qw67Cp6rWs66qw67Cp6rWs66qw67Cp6rWs66qw67Cp6rWs66qw

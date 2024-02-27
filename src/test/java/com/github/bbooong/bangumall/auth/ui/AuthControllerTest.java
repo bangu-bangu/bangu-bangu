@@ -1,6 +1,8 @@
 package com.github.bbooong.bangumall.auth.ui;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.emptyString;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 import com.github.bbooong.bangumall.config.AcceptanceTest;
 import com.github.bbooong.bangumall.fixture.MemberFixture;
@@ -39,15 +41,17 @@ class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .body(
                                 """
-                            {
-                                "email": "%s",
-                                "password": "%s"
-                            }
-                            """
+                                        {
+                                            "email": "%s",
+                                            "password": "%s"
+                                        }
+                                        """
                                         .formatted(email, password))
                         .when()
                         .post("/auth/login")
                         .then()
+                        .log()
+                        .all()
                         .statusCode(HttpStatus.OK.value())
                         .body("token", is(not(emptyString())));
             }

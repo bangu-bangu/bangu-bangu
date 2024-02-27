@@ -4,7 +4,7 @@ import com.github.bbooong.bangumall.auth.application.dto.AuthLoginRequest;
 import com.github.bbooong.bangumall.auth.application.dto.AuthLoginResponse;
 import com.github.bbooong.bangumall.auth.domain.Member;
 import com.github.bbooong.bangumall.auth.domain.MemberRepository;
-import com.github.bbooong.bangumall.auth.domain.TokenManager;
+import com.github.bbooong.bangumall.auth.domain.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
 
     private final MemberRepository memberRepository;
-    private final TokenManager tokenManager;
+    private final TokenProvider tokenProvider;
 
     @Transactional(readOnly = true)
     public AuthLoginResponse login(final AuthLoginRequest request) {
@@ -23,7 +23,8 @@ public class AuthService {
                         .findByEmailAndPassword(request.email(), request.password())
                         .orElseThrow();
 
-        final String token = tokenManager.generateToken(member.getId());
+        final String token = tokenProvider.generateAccessToken(member.getId());
+
         return new AuthLoginResponse(token);
     }
 }
