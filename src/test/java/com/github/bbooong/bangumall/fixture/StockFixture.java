@@ -12,17 +12,22 @@ public abstract class StockFixture {
     private StockFixture() {}
 
     public static long create(
-            final long productId, final int quantity, final LocalDate expiredDate) {
+            final String token,
+            final long productId,
+            final int quantity,
+            final LocalDate expiredDate) {
         return Long.parseLong(
                 RestAssured.given()
                         .contentType(APPLICATION_JSON_VALUE)
+                        .auth()
+                        .oauth2(token)
                         .body(
                                 """
-                        {
-                            "quantity": %s,
-                            "expiredDate": "%s"
-                        }
-                        """
+                                        {
+                                            "quantity": %s,
+                                            "expiredDate": "%s"
+                                        }
+                                        """
                                         .formatted(quantity, expiredDate))
                         .when()
                         .post("/products/{productId}/stocks", productId)

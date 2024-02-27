@@ -20,21 +20,21 @@ import org.springframework.http.MediaType;
 @AcceptanceTest
 class ProductControllerTest {
 
+    String 판매자_token;
+
+    @BeforeEach
+    public void init() {
+        final String email = "test@email.com";
+        final String password = "test";
+        final String role = "VENDOR";
+
+        MemberFixture.createMember(email, password, role);
+        판매자_token = AuthFixture.login(email, password);
+    }
+
     @Nested
     @DisplayName("product를 생성할 때")
     class Describe_CreateProduct {
-
-        String vendorToken;
-
-        @BeforeEach
-        public void init() {
-            final String email = "test@email.com";
-            final String password = "test";
-            final String role = "VENDOR";
-
-            MemberFixture.createMember(email, password, role);
-            vendorToken = AuthFixture.login(email, password);
-        }
 
         @Nested
         @DisplayName("product 정보를 바르게 입력하면")
@@ -49,6 +49,8 @@ class ProductControllerTest {
             void it_returns_productId() {
                 RestAssured.given()
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .auth()
+                        .oauth2(판매자_token)
                         .body(
                                 """
                                         {
@@ -77,9 +79,9 @@ class ProductControllerTest {
 
         @BeforeEach
         public void init() {
-            양배추_파스타_id = ProductFixture.create("양배추 파스타", 18000, "JMT");
-            파인애플_스무디_id = ProductFixture.create("파인애플 스무디", 7000, "GJMT");
-            에이스_씬에스프레소_id = ProductFixture.create("에이스 씬에스프레소", 3000, "NMT");
+            양배추_파스타_id = ProductFixture.create(판매자_token, "양배추 파스타", 18000, "JMT");
+            파인애플_스무디_id = ProductFixture.create(판매자_token, "파인애플 스무디", 7000, "GJMT");
+            에이스_씬에스프레소_id = ProductFixture.create(판매자_token, "에이스 씬에스프레소", 3000, "NMT");
         }
 
         @Test
@@ -112,7 +114,7 @@ class ProductControllerTest {
 
         @BeforeEach
         public void init() {
-            양배추_파스타_id = ProductFixture.create("양배추 파스타", 18000, "소화가 잘되고 감칠맛이 나는 파스타");
+            양배추_파스타_id = ProductFixture.create(판매자_token, "양배추 파스타", 18000, "소화가 잘되고 감칠맛이 나는 파스타");
         }
 
         @Nested

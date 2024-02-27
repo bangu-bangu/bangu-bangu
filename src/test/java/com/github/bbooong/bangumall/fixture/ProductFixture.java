@@ -11,18 +11,21 @@ public abstract class ProductFixture {
 
     private ProductFixture() {}
 
-    public static long create(final String name, final int price, final String description) {
+    public static long create(
+            final String token, final String name, final int price, final String description) {
         return Long.parseLong(
                 RestAssured.given()
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .auth()
+                        .oauth2(token)
                         .body(
                                 """
-                        {
-                            "name": "%s",
-                            "price": "%s",
-                            "description": "%s"
-                        }
-                        """
+                                        {
+                                            "name": "%s",
+                                            "price": "%s",
+                                            "description": "%s"
+                                        }
+                                        """
                                         .formatted(name, price, description))
                         .when()
                         .post("/products")
