@@ -1,5 +1,7 @@
 package com.github.bbooong.bangumall.stock.ui;
 
+import com.github.bbooong.bangumall.auth.domain.Authorities;
+import com.github.bbooong.bangumall.auth.domain.MemberRole;
 import com.github.bbooong.bangumall.stock.application.StockService;
 import com.github.bbooong.bangumall.stock.application.dto.StockCreateRequest;
 import com.github.bbooong.bangumall.stock.application.dto.StockDecreaseRequest;
@@ -26,12 +28,14 @@ public class StockController {
 
     private final StockService stockService;
 
+    @Authorities(MemberRole.VENDOR)
     @GetMapping("/products/{productId}/stocks")
     @ResponseStatus(HttpStatus.OK)
     public List<StockInfoResponse> getStock(@PathVariable @Positive final long productId) {
         return stockService.getStocks(productId);
     }
 
+    @Authorities(MemberRole.VENDOR)
     @PostMapping("/products/{productId}/stocks")
     public ResponseEntity<Void> createStock(
             @PathVariable @Positive final long productId,
@@ -42,6 +46,7 @@ public class StockController {
                 .build();
     }
 
+    @Authorities(MemberRole.VENDOR)
     @PutMapping("/stocks/{id}")
     @ResponseStatus(HttpStatus.OK)
     public StockInfoResponse updateStock(
@@ -50,6 +55,7 @@ public class StockController {
         return stockService.update(id, request);
     }
 
+    @Authorities(MemberRole.VENDOR)
     @PostMapping("/stocks/decrease")
     @ResponseStatus(HttpStatus.OK)
     public void decreaseStocks(@Valid @RequestBody final List<StockDecreaseRequest> requests) {

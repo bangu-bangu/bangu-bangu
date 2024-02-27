@@ -1,5 +1,7 @@
 package com.github.bbooong.bangumall.product.ui;
 
+import com.github.bbooong.bangumall.auth.domain.Authorities;
+import com.github.bbooong.bangumall.auth.domain.MemberRole;
 import com.github.bbooong.bangumall.product.application.ProductService;
 import com.github.bbooong.bangumall.product.application.dto.ProductCreateRequest;
 import com.github.bbooong.bangumall.product.application.dto.ProductDetailResponse;
@@ -25,6 +27,7 @@ public class ProductController {
 
     private final ProductService productService;
 
+    @Authorities(MemberRole.VENDOR)
     @PostMapping
     public ResponseEntity<Void> createProduct(
             @Valid @RequestBody final ProductCreateRequest request) {
