@@ -11,19 +11,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TokenProviderImpl implements TokenProvider {
 
-    private static final long ACCESS_TOKEN_EXPIRATION_MILLIS = TimeUnit.HOURS.toMillis(1);
+    private static final long TOKEN_EXPIRATION_MILLIS = TimeUnit.HOURS.toMillis(1);
 
     private final JwtBuilder builder;
 
     @Override
-    public String generateAccessToken(final Long id) {
-        return generateToken(id, ACCESS_TOKEN_EXPIRATION_MILLIS);
-    }
-
-    private String generateToken(final Long id, final long duration) {
+    public String generateToken(final Long id, final MemberRole role) {
         return builder.claim(ClaimType.MEMBER_ID.getClaimName(), String.valueOf(id))
                 .claim(ClaimType.ROLE.getClaimName(), MemberRole.VENDOR)
-                .expiration(new Date(System.currentTimeMillis() + duration))
+                .expiration(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION_MILLIS))
                 .compact();
     }
 }

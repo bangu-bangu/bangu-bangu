@@ -23,7 +23,7 @@ public class AuthService {
                         .findByEmailAndPassword(request.email(), request.password())
                         .orElseThrow();
 
-        final String token = tokenProvider.generateAccessToken(member.getId());
+        final String token = tokenProvider.generateToken(member.getId(), member.getRole());
 
         return new AuthLoginResponse(token);
     }

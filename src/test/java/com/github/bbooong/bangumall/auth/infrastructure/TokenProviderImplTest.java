@@ -2,6 +2,7 @@ package com.github.bbooong.bangumall.auth.infrastructure;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.github.bbooong.bangumall.auth.domain.MemberRole;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import javax.crypto.SecretKey;
@@ -23,15 +24,16 @@ class TokenProviderImplTest {
     }
 
     @Test
-    @DisplayName("access JWT를 생성한다.")
-    void createAccessToken() {
+    @DisplayName("JWT를 생성한다.")
+    void createToken() {
         /* given */
         final Long memberId = 777L;
+        final MemberRole memberRole = MemberRole.CUSTOMER;
 
         /* when */
-        final String accessToken = jwtProviderImpl.generateAccessToken(memberId);
+        final String token = jwtProviderImpl.generateToken(memberId, memberRole);
 
         /* then */
-        assertThat(accessToken).isNotEmpty();
+        assertThat(token).isNotEmpty();
     }
 }
