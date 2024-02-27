@@ -28,10 +28,11 @@ class AuthControllerTest {
 
             final String email = "test@email.com";
             final String password = "test";
+            final String role = "CUSTOMER";
 
             @BeforeEach
             public void init() {
-                MemberFixture.createMember(email, password);
+                MemberFixture.createMember(email, password, role);
             }
 
             @Test

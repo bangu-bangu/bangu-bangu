@@ -24,15 +24,16 @@ class ProductControllerTest {
     @DisplayName("product를 생성할 때")
     class Describe_CreateProduct {
 
-        String sellerToken;
+        String vendorToken;
 
         @BeforeEach
         public void init() {
             final String email = "test@email.com";
             final String password = "test";
+            final String role = "VENDOR";
 
-            MemberFixture.createMember(email, password);
-            sellerToken = AuthFixture.login(email, password);
+            MemberFixture.createMember(email, password, role);
+            vendorToken = AuthFixture.login(email, password);
         }
 
         @Nested
@@ -50,12 +51,12 @@ class ProductControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .body(
                                 """
-                            {
-                                "name": "%s",
-                                "price": "%s",
-                                "description": "%s"
-                            }
-                            """
+                                        {
+                                            "name": "%s",
+                                            "price": "%s",
+                                            "description": "%s"
+                                        }
+                                        """
                                         .formatted(name, price, description))
                         .when()
                         .post("/products")

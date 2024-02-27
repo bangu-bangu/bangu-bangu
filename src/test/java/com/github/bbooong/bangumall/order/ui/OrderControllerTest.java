@@ -23,19 +23,19 @@ import org.springframework.http.HttpStatus;
 @AcceptanceTest
 class OrderControllerTest {
 
-    String sellerToken, customerToken;
+    String vendorToken, customerToken;
     long 양념게장_id, 양배추_파스타_id;
 
     @BeforeEach
     public void init() {
-        MemberFixture.createMember("seller@email.com", "seller");
-        sellerToken = AuthFixture.login("seller@email.com", "seller");
+        MemberFixture.createMember("vendor@email.com", "vendor", "VENDOR");
+        vendorToken = AuthFixture.login("vendor@email.com", "vendor");
         양념게장_id = ProductFixture.create("양념게장 1kg", 30000, "진짜 맛있음");
         양배추_파스타_id = ProductFixture.create("양배추 파스타", 18000, "소화가 잘되고 감칠맛이 나는 파스타");
         StockFixture.create(양념게장_id, 100, LocalDate.of(2034, 1, 30));
         StockFixture.create(양배추_파스타_id, 50, LocalDate.of(2034, 2, 1));
 
-        MemberFixture.createMember("customer@email.com", "customer");
+        MemberFixture.createMember("customer@email.com", "customer", "CUSTOMER");
         customerToken = AuthFixture.login("customer@email.com", "customer");
     }
 

@@ -30,8 +30,9 @@ class StockControllerTest {
     public void init() {
         final String email = "test@email.com";
         final String password = "test";
+        final String role = "VENDOR";
 
-        MemberFixture.createMember(email, password);
+        MemberFixture.createMember(email, password, role);
         판매자_token = AuthFixture.login(email, password);
         양념게장_id = ProductFixture.create("양념게장 1kg", 30000, "진짜 맛있음");
         양배추_파스타_id = ProductFixture.create("양배추 파스타", 18000, "소화가 잘되고 감칠맛이 나는 파스타");
