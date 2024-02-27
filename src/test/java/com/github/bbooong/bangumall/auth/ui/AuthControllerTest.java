@@ -51,8 +51,6 @@ class AuthControllerTest {
                         .when()
                         .post("/auth/login")
                         .then()
-                        .log()
-                        .all()
                         .statusCode(HttpStatus.OK.value())
                         .body("token", is(not(emptyString())));
             }
