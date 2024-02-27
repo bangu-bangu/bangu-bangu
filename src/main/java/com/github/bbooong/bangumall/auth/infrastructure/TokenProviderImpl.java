@@ -18,7 +18,7 @@ public class TokenProviderImpl implements TokenProvider {
     @Override
     public String generateToken(final Long id, final MemberRole role) {
         return builder.claim(ClaimType.MEMBER_ID.getClaimName(), String.valueOf(id))
-                .claim(ClaimType.ROLE.getClaimName(), MemberRole.VENDOR)
+                .claim(ClaimType.ROLE.getClaimName(), role)
                 .expiration(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION_MILLIS))
                 .compact();
     }
