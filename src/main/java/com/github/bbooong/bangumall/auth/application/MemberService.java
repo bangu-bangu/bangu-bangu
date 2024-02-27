@@ -15,7 +15,7 @@ public class MemberService {
 
     @Transactional
     public Long createMember(final MemberCreateRequest request) {
-        final Member member = Member.create(request.email(), request.password());
+        final Member member = Member.create(request.email(), request.password(), request.role());
         return memberRepository.save(member).getId();
     }
 }

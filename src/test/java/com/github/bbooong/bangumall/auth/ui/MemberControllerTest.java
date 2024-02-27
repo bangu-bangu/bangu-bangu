@@ -25,6 +25,7 @@ class MemberControllerTest {
 
             final String email = "test@email.com";
             final String password = "test";
+            final String role = "CUSTOMER";
 
             @Test
             @DisplayName("추가한 member의 id를 반환한다.")
@@ -33,12 +34,13 @@ class MemberControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .body(
                                 """
-                                {
-                                    "email": "%s",
-                                    "password": "%s"
-                                }
-                                """
-                                        .formatted(email, password))
+                                        {
+                                            "email": "%s",
+                                            "password": "%s",
+                                            "role": "%s"
+                                        }
+                                        """
+                                        .formatted(email, password, role))
                         .when()
                         .post("/members")
                         .then()
