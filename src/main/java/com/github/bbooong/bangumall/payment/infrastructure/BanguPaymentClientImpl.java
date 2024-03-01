@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 public class BanguPaymentClientImpl implements BanguPaymentClient {
 
     @Override
-    public boolean requestPayment(final long orderId) {
-        return true;
+    public void requestPayment(final long orderId) { // TODO: 구현
     }
 }
