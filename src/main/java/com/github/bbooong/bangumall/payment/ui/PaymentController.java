@@ -28,7 +28,6 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
-    // 결제 요청
     @PostMapping
     @Authorities(MemberRole.CUSTOMER)
     public ResponseEntity<Void> requestPayment(
@@ -39,7 +38,6 @@ public class PaymentController {
         return ResponseEntity.created(URI.create("/payments/" + paymentId)).build();
     }
 
-    // 결제 확인
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Authorities(MemberRole.CUSTOMER)
@@ -48,7 +46,6 @@ public class PaymentController {
         return paymentService.getPayment(authPrincipal.memberId(), id);
     }
 
-    // 결제 취소
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Authorities(MemberRole.CUSTOMER)
