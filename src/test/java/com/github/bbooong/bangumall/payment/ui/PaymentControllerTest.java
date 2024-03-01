@@ -1,9 +1,13 @@
 package com.github.bbooong.bangumall.payment.ui;
 
+import static org.hamcrest.Matchers.matchesRegex;
+import static org.springframework.http.HttpHeaders.LOCATION;
+
 import com.github.bbooong.bangumall.config.AcceptanceTest;
 import com.github.bbooong.bangumall.fixture.AuthFixture;
 import com.github.bbooong.bangumall.fixture.MemberFixture;
 import com.github.bbooong.bangumall.fixture.OrderFixture;
+import com.github.bbooong.bangumall.fixture.PaymentFixture;
 import com.github.bbooong.bangumall.fixture.ProductFixture;
 import com.github.bbooong.bangumall.fixture.StockFixture;
 import io.restassured.RestAssured;
@@ -64,15 +68,53 @@ class PaymentControllerTest {
                         .oauth2(구매자_token)
                         .body(
                                 """
-                        {
-                            "orderId": %d
-                        }
-                        """
+                            {
+                                "orderId": %d
+                            }
+                            """
                                         .formatted(결제대기_주문_id))
                         .when()
                         .post("/payments")
                         .then()
-                        .statusCode(HttpStatus.CREATED.value());
+                        .statusCode(HttpStatus.CREATED.value())
+                        .header(LOCATION, matchesRegex("/payments/[0-9]+"));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("결제를 조회할 때")
+    class Describe_GetPayment {
+
+        @Nested
+        @DisplayName("구매자가 존재하는 id의 결제 내역을 조회하면")
+        class Context_With_PaymentExists {
+
+            long 결제_id;
+
+            @BeforeEach
+            void setUp() {
+                final Map<String, Object> 양념게장_주문 = Map.of("productId", 양념게장_id, "quantity", 5);
+                final Map<String, Object> 양배추_파스타_주문 =
+                        Map.of("productId", 양배추_파스타_id, "quantity", 5);
+                final long 주문_id = OrderFixture.order(구매자_token, List.of(양념게장_주문, 양배추_파스타_주문));
+
+                결제_id = PaymentFixture.requestPayment(구매자_token, 주문_id);
+            }
+
+            @Test
+            @DisplayName("결제 내역을 반환한다")
+            void it_returns_payment() {
+                RestAssured.given()
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .auth()
+                        .oauth2(구매자_token)
+                        .when()
+                        .get("/payments/{id}", 결제_id)
+                        .then()
+                        .statusCode(HttpStatus.OK.value())
+                        .body("totalPrice", matchesRegex("[0-9]+"))
+                        .body("createdAt", matchesRegex("[0-9]{4}-[0-9]{2}-[0-9]{2}"));
             }
         }
     }
