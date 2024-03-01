@@ -9,10 +9,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import com.github.bbooong.bangumall.config.AcceptanceTest;
 import com.github.bbooong.bangumall.fixture.AuthFixture;
 import com.github.bbooong.bangumall.fixture.MemberFixture;
+import com.github.bbooong.bangumall.fixture.OrderFixture;
 import com.github.bbooong.bangumall.fixture.ProductFixture;
 import com.github.bbooong.bangumall.fixture.StockFixture;
 import io.restassured.RestAssured;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -90,19 +93,19 @@ class OrderControllerTest {
                         .oauth2(구매자_token)
                         .body(
                                 """
-                                        {
-                                            "orderLines": [
-                                                {
-                                                    "productId": %d,
-                                                    "quantity": %d
-                                                },
-                                                {
-                                                    "productId": %d,
-                                                    "quantity": %d
-                                                }
-                                            ]
-                                        }
-                                        """
+                            {
+                                "orderLines": [
+                                    {
+                                        "productId": %d,
+                                        "quantity": %d
+                                    },
+                                    {
+                                        "productId": %d,
+                                        "quantity": %d
+                                    }
+                                ]
+                            }
+                            """
                                         .formatted(양념게장_id, 양념게장_주문_수량, 양배추_파스타_id, 양배추_파스타_주문_수량))
                         .when()
                         .post("/orders")
@@ -131,6 +134,54 @@ class OrderControllerTest {
                         .statusCode(OK.value())
                         .body("[0].quantity", is(양배추_파스타_재고 - 양배추_파스타_주문_수량))
                         .body("[0].expiredDate", is("2034-02-01"));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("order를 조회할 때")
+    class Describe_GetOrder {
+
+        @Nested
+        @DisplayName("구매자가 주문한 order id로 요청하면")
+        class Context_With_ValidOrderId {
+
+            long 주문_id;
+
+            @BeforeEach
+            void setUp() {
+                final Map<String, Object> 양념게장_주문 = Map.of("productId", 양념게장_id, "quantity", 5);
+                final Map<String, Object> 양배추_파스타_주문 =
+                        Map.of("productId", 양배추_파스타_id, "quantity", 5);
+                주문_id = OrderFixture.order(구매자_token, List.of(양념게장_주문, 양배추_파스타_주문));
+            }
+
+            @Test
+            @DisplayName("order 정보를 반환한다.")
+            void it_returns_orderInfo() {
+                RestAssured.given()
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .auth()
+                        .oauth2(구매자_token)
+                        .when()
+                        .get("/orders/{id}", 주문_id)
+                        .then()
+                        .statusCode(OK.value())
+                        .body(
+                                "totalPrice",
+                                is(240_000),
+                                "orderLines[0].productId",
+                                is(양념게장_id),
+                                "orderLines[0].price",
+                                is(30_000),
+                                "orderLines[0].quantity",
+                                is(5),
+                                "orderLines[1].productId",
+                                is(양배추_파스타_id),
+                                "orderLines[1].price",
+                                is(18_000),
+                                "orderLines[1].quantity",
+                                is(5));
             }
         }
     }
