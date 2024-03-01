@@ -122,4 +122,48 @@ class PaymentControllerTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("결제를 취소할 때")
+    class Describe_CancelPayment {
+
+        @Nested
+        @DisplayName("구매자가 결제 완료 된 결제를 취소하면")
+        class Context_With_PaymentCompleted {
+
+            long 주문_id, 결제_id;
+
+            @BeforeEach
+            void setUp() {
+                final Map<String, Object> 양념게장_주문 = Map.of("productId", 양념게장_id, "quantity", 5);
+                final Map<String, Object> 양배추_파스타_주문 =
+                        Map.of("productId", 양배추_파스타_id, "quantity", 5);
+                주문_id = OrderFixture.order(구매자_token, List.of(양념게장_주문, 양배추_파스타_주문));
+
+                결제_id = PaymentFixture.requestPayment(구매자_token, 주문_id);
+            }
+
+            @Test
+            @DisplayName("결제가 취소된다")
+            void it_cancels_payment() {
+                RestAssured.given()
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .auth()
+                        .oauth2(구매자_token)
+                        .when()
+                        .delete("/payments/{id}", 결제_id)
+                        .then()
+                        .statusCode(HttpStatus.NO_CONTENT.value());
+
+                RestAssured.given()
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .auth()
+                        .oauth2(구매자_token)
+                        .when()
+                        .get("/payments/{id}", 결제_id)
+                        .then()
+                        .statusCode(HttpStatus.NOT_FOUND.value());
+            }
+        }
+    }
 }

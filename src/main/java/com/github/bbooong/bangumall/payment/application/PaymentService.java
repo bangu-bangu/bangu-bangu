@@ -42,4 +42,16 @@ public class PaymentService {
         orderClient.getOrder(memberId, payment.getOrderId());
         return new PaymentInfoResponse(payment.getTotalPrice(), payment.getCreatedAt());
     }
+
+    @Transactional
+    public void cancelPayment(final long memberId, final long id) {
+        final Payment payment =
+                paymentRepository
+                        .findById(id)
+                        .orElseThrow(
+                                () ->
+                                        new IllegalArgumentException(
+                                                "결제 정보를 찾을 수 없습니다.")); // TODO: 에러 처리
+        paymentRepository.delete(payment);
+    }
 }
