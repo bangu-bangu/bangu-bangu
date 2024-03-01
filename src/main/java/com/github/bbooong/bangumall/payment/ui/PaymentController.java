@@ -1,5 +1,7 @@
 package com.github.bbooong.bangumall.payment.ui;
 
+import com.github.bbooong.bangumall.auth.application.dto.AuthPrincipal;
+import com.github.bbooong.bangumall.auth.domain.Authenticated;
 import com.github.bbooong.bangumall.auth.domain.Authorities;
 import com.github.bbooong.bangumall.auth.domain.MemberRole;
 import com.github.bbooong.bangumall.payment.application.PaymentService;
@@ -29,8 +31,9 @@ public class PaymentController {
     @PostMapping
     @Authorities(MemberRole.CUSTOMER)
     public ResponseEntity<Void> requestPayment(
+            @Authenticated final AuthPrincipal authPrincipal,
             @RequestBody @Valid final PaymentCreateRequest request) {
-        final long paymentId = paymentService.requestPayment(request);
+        final long paymentId = paymentService.requestPayment(authPrincipal.memberId(), request);
 
         return ResponseEntity.created(URI.create("/payments/" + paymentId)).build();
     }
