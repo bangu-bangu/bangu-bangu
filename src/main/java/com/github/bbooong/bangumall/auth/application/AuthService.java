@@ -21,7 +21,7 @@ public class AuthService {
         final Member member =
                 memberRepository
                         .findByEmailAndPassword(request.email(), request.password())
-                        .orElseThrow();
+                        .orElseThrow(); // TODO: 예외 처리
 
         final String token = tokenProvider.generateToken(member.getId(), member.getRole());
 
