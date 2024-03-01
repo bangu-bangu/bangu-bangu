@@ -42,8 +42,9 @@ public class PaymentController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Authorities(MemberRole.CUSTOMER)
-    public PaymentInfoResponse getPayment(@PathVariable final String id) {
-        return new PaymentInfoResponse(1000, null);
+    public PaymentInfoResponse getPayment(
+            @Authenticated final AuthPrincipal authPrincipal, @PathVariable final long id) {
+        return paymentService.getPayment(authPrincipal.memberId(), id);
     }
 
     // 결제 취소

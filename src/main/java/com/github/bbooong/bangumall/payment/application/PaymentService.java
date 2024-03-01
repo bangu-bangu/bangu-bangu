@@ -1,6 +1,7 @@
 package com.github.bbooong.bangumall.payment.application;
 
 import com.github.bbooong.bangumall.payment.application.dto.PaymentCreateRequest;
+import com.github.bbooong.bangumall.payment.application.dto.PaymentInfoResponse;
 import com.github.bbooong.bangumall.payment.domain.OrderClient;
 import com.github.bbooong.bangumall.payment.domain.OrderInfo;
 import com.github.bbooong.bangumall.payment.domain.Payment;
@@ -27,5 +28,18 @@ public class PaymentService {
         final Payment payment = Payment.create(request.orderId(), orderInfo.totalPrice());
         // TODO: Order 상태 변경
         return paymentRepository.save(payment).getId();
+    }
+
+    @Transactional(readOnly = true)
+    public PaymentInfoResponse getPayment(final long memberId, final long id) {
+        final Payment payment =
+                paymentRepository
+                        .findById(id)
+                        .orElseThrow(
+                                () ->
+                                        new IllegalArgumentException(
+                                                "결제 정보를 찾을 수 없습니다.")); // TODO: 에러 처리
+        orderClient.getOrder(memberId, payment.getOrderId());
+        return new PaymentInfoResponse(payment.getTotalPrice(), payment.getCreatedAt());
     }
 }

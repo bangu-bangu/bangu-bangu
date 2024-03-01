@@ -1,5 +1,6 @@
 package com.github.bbooong.bangumall.payment.ui;
 
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.matchesRegex;
 import static org.springframework.http.HttpHeaders.LOCATION;
 
@@ -113,8 +114,11 @@ class PaymentControllerTest {
                         .get("/payments/{id}", 결제_id)
                         .then()
                         .statusCode(HttpStatus.OK.value())
-                        .body("totalPrice", matchesRegex("[0-9]+"))
-                        .body("createdAt", matchesRegex("[0-9]{4}-[0-9]{2}-[0-9]{2}"));
+                        .body("totalPrice", is(240_000))
+                        .body(
+                                "createdAt",
+                                matchesRegex(
+                                        "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{6}$"));
             }
         }
     }
