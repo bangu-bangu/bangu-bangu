@@ -49,7 +49,7 @@ public class PaymentController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Authorities(MemberRole.CUSTOMER)
-    public void cancelPayment(
+    public void deletePayment(
             @Authenticated final AuthPrincipal authPrincipal, @PathVariable final long id) {
         paymentService.cancelPayment(authPrincipal.memberId(), id);
     }

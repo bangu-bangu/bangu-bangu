@@ -43,7 +43,7 @@ class PaymentControllerTest {
     }
 
     @Nested
-    @DisplayName("결제를 요청할 때")
+    @DisplayName("payment를 생성할 때")
     class Describe_RequestPayment {
 
         @Nested
@@ -61,7 +61,7 @@ class PaymentControllerTest {
             }
 
             @Test
-            @DisplayName("결제가 완료되어야 한다")
+            @DisplayName("payment를 생성한다")
             void it_completes_payment() {
                 RestAssured.given()
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -84,11 +84,11 @@ class PaymentControllerTest {
     }
 
     @Nested
-    @DisplayName("결제를 조회할 때")
+    @DisplayName("payment를 조회할 때")
     class Describe_GetPayment {
 
         @Nested
-        @DisplayName("구매자가 존재하는 id의 결제 내역을 조회하면")
+        @DisplayName("구매자가 존재하는 id의 payment을 조회하면")
         class Context_With_PaymentExists {
 
             long 결제_id;
@@ -104,7 +104,7 @@ class PaymentControllerTest {
             }
 
             @Test
-            @DisplayName("결제 내역을 반환한다")
+            @DisplayName("payment 내역을 반환한다")
             void it_returns_payment() {
                 RestAssured.given()
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -124,12 +124,12 @@ class PaymentControllerTest {
     }
 
     @Nested
-    @DisplayName("결제를 취소할 때")
-    class Describe_CancelPayment {
+    @DisplayName("payment를 삭제할 때")
+    class Describe_DeletePayment {
 
         @Nested
-        @DisplayName("구매자가 결제 완료 된 결제를 취소하면")
-        class Context_With_PaymentCompleted {
+        @DisplayName("해당 id로 결제한 주문자가 요청하면")
+        class Context_With_PaymentByOrderer {
 
             long 주문_id, 결제_id;
 
@@ -144,8 +144,8 @@ class PaymentControllerTest {
             }
 
             @Test
-            @DisplayName("결제가 취소된다")
-            void it_cancels_payment() {
+            @DisplayName("payment를 삭제한다")
+            void it_deletes_payment() {
                 RestAssured.given()
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .auth()
