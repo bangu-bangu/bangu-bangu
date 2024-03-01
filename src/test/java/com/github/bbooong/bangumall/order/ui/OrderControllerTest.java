@@ -27,7 +27,7 @@ import org.springframework.http.HttpStatus;
 class OrderControllerTest {
 
     String 판매자_token, 구매자_token;
-    long 양념게장_id, 양배추_파스타_id;
+    Long 양념게장_id, 양배추_파스타_id;
 
     @BeforeEach
     public void init() {
@@ -171,13 +171,13 @@ class OrderControllerTest {
                                 "totalPrice",
                                 is(240_000),
                                 "orderLines[0].productId",
-                                is(양념게장_id),
+                                is(양념게장_id.intValue()),
                                 "orderLines[0].price",
                                 is(30_000),
                                 "orderLines[0].quantity",
                                 is(5),
                                 "orderLines[1].productId",
-                                is(양배추_파스타_id),
+                                is(양배추_파스타_id.intValue()),
                                 "orderLines[1].price",
                                 is(18_000),
                                 "orderLines[1].quantity",

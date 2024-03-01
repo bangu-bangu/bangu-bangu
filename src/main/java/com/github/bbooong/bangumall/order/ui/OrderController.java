@@ -1,5 +1,7 @@
 package com.github.bbooong.bangumall.order.ui;
 
+import com.github.bbooong.bangumall.auth.application.dto.AuthPrincipal;
+import com.github.bbooong.bangumall.auth.domain.Authenticated;
 import com.github.bbooong.bangumall.auth.domain.Authorities;
 import com.github.bbooong.bangumall.auth.domain.MemberRole;
 import com.github.bbooong.bangumall.order.application.OrderService;
@@ -27,17 +29,19 @@ public class OrderController {
 
     @Authorities(MemberRole.CUSTOMER)
     @PostMapping
-    public ResponseEntity<Void> createOrder(@Valid @RequestBody final OrderCreateRequest request) {
-        final long orderId =
-                orderService.createOrder(1L, request); // TODO: 인증, 인가 구현 후 memberId를 사용하도록 변경
+    public ResponseEntity<Void> createOrder(
+            @Authenticated final AuthPrincipal authPrincipal,
+            @Valid @RequestBody final OrderCreateRequest request) {
+        final long orderId = orderService.createOrder(authPrincipal.memberId(), request);
 
         return ResponseEntity.created(URI.create("/orders/" + orderId)).build();
     }
 
-    @GetMapping("/{orderId}")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Authorities(MemberRole.CUSTOMER)
-    public OrderInfoResponse getOrder(@PathVariable final long orderId) {
-        return new OrderInfoResponse(null, 0L); // TODO: 구현 필요
+    public OrderInfoResponse getOrder(
+            @Authenticated final AuthPrincipal authPrincipal, @PathVariable final long id) {
+        return orderService.getOrder(authPrincipal.memberId(), id);
     }
 }

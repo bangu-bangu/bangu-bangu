@@ -1,6 +1,7 @@
 package com.github.bbooong.bangumall.order.application;
 
 import com.github.bbooong.bangumall.order.application.dto.OrderCreateRequest;
+import com.github.bbooong.bangumall.order.application.dto.OrderInfoResponse;
 import com.github.bbooong.bangumall.order.application.dto.OrderLineRequest;
 import com.github.bbooong.bangumall.order.domain.Order;
 import com.github.bbooong.bangumall.order.domain.OrderLine;
@@ -37,5 +38,16 @@ public class OrderService {
         stockClient.decreaseStocks(stockDecreaseRequests);
 
         return orderRepository.save(Order.create(memberId, orderLines)).getId();
+    }
+
+    @Transactional(readOnly = true)
+    public OrderInfoResponse getOrder(final long memberId, final long orderId) {
+        final Order order =
+                orderRepository
+                        .findByIdAndMemberId(orderId, memberId)
+                        .orElseThrow(
+                                () -> new IllegalArgumentException("주문을 찾을 수 없습니다")); // TODO: 예외 처리
+
+        return OrderInfoResponse.create(order);
     }
 }
