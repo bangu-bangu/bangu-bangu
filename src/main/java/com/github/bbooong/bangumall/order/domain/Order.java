@@ -40,4 +40,8 @@ public class Order extends BaseEntity {
     public static Order create(final long memberId, final List<OrderLine> orderLines) {
         return new Order(null, memberId, orderLines);
     }
+
+    public long totalPrice() {
+        return orderLines.stream().mapToLong(OrderLine::totalPrice).sum();
+    }
 }

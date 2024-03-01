@@ -4,9 +4,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Embeddable
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class OrderLine {
@@ -22,5 +24,9 @@ public class OrderLine {
 
     public static OrderLine create(final Long productId, final int price, final int quantity) {
         return new OrderLine(productId, price, quantity);
+    }
+
+    public long totalPrice() {
+        return (long) price * quantity;
     }
 }
